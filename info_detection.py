@@ -1,14 +1,30 @@
 # outlier detecter based on info_clustering
 from info_cluster import InfoCluster
 import numpy as np
+def statistic_get(int_list):
+    dic = {}
+    for i in int_list:
+        if(dic.get(i)):
+            dic[i] += 1
+        else:
+            dic[i] = 1
+    return dic
 class InfoOutlierDetector(InfoCluster):
     def __init__(self, gamma=1):
         # currently only rbf metric is supported
         super().__init__(gamma=gamma)
     def fit(self, X, **kwargs):
-        # save the training data for prediction use
-        self.data = X
         super().fit(X, **kwargs)
+        predict_cat = self.partition_num_list[-2]
+        labels = np.asarray(self.get_category(predict_cat))
+        dic = statistic_get(labels)
+        label_max = -1
+        for k,v in dic.items():
+            if(v > label_max):
+                label_max = v
+                label_num = k
+        # save the training data for prediction use        
+        self.data = X[labels == label_num, :]
     def predict(self, point_list):
         '''predict whether the new data is outlier or not
         

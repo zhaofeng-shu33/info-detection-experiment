@@ -43,9 +43,11 @@ if __name__ == '__main__':
     plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors='black')
     plt.scatter(train_data[y_pred==1,0], train_data[y_pred==1,1],s=5)
     plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1],s=5)
+    plt.title('Elliptic Envelope')
     plt.subplot(1,2,2)
     plt.contour(xx, yy, Z1, levels=[0.5], linewidths=2, colors='black')
     plt.scatter(train_data[labels==0,0], train_data[labels==0,1],s=5)
     plt.scatter(train_data[labels>0,0], train_data[labels>0,1],s=5)
+    plt.title('info-detection')
     plt.savefig('build/outlier_compare.eps')
 
