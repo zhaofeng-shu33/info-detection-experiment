@@ -22,4 +22,4 @@ class InfoOutlierDetector(InfoCluster):
         '''
         threshold = self.critical_values[-1]
         point_list_inner = point_list.reshape((point_list.shape[0], 1, point_list.shape[1]))
-        return np.sum(np.exp(-1.0 * np.linalg.norm(self.data-point_list_inner, axis=2)/self._gamma), axis=1) >= threshold;
+        return np.sum(np.exp(-1.0 * np.linalg.norm(self.data-point_list_inner, axis=2)*self._gamma), axis=1) >= threshold;
