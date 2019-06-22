@@ -13,8 +13,8 @@ class InfoOutlierDetector(InfoCluster):
     def __init__(self, gamma=1):
         # currently only rbf metric is supported
         super().__init__(gamma=gamma)
-    def fit(self, X, **kwargs):
-        super().fit(X, **kwargs)
+    def fit(self, X):
+        super().fit(X, use_psp_i=True)
         predict_cat = self.partition_num_list[-2]
         labels = np.asarray(self.get_category(predict_cat))
         dic = statistic_get(labels)
@@ -25,6 +25,9 @@ class InfoOutlierDetector(InfoCluster):
                 label_num = k
         # save the training data for prediction use        
         self.data = X[labels == label_num, :]
+    def fit_predict(self, X):
+        self.fit(X)
+        return self.predict(X)
     def predict(self, point_list):
         '''predict whether the new data is outlier or not
         
@@ -38,4 +41,5 @@ class InfoOutlierDetector(InfoCluster):
         '''
         threshold = self.critical_values[-1]
         point_list_inner = point_list.reshape((point_list.shape[0], 1, point_list.shape[1]))
-        return np.sum(np.exp(-1.0 * np.linalg.norm(self.data-point_list_inner, axis=2)*self._gamma), axis=1) >= threshold;
+        zero_one_format = np.sum(np.exp(-1.0 * np.linalg.norm(self.data-point_list_inner, axis=2)**2*self._gamma), axis=1) >= threshold;
+        return (zero_one_format.astype(int) * 2 - 1)
