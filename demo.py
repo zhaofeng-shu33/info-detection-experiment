@@ -26,6 +26,7 @@ def generate_two_moon():
     n_outliers = int(outliers_fraction * n_samples)    
     data = 4. * (make_moons(n_samples=n_samples, noise=.05, random_state=0)[0] -
               np.array([0.5, 0.25]))
+    rng = np.random.RandomState(34)              
     outlier_data = rng.uniform(low=-6, high=6,
                            size=(n_outliers, 2))
     # make real outlier
@@ -44,31 +45,30 @@ def run_moon():
 
     alg = EllipticEnvelope(contamination=0.15)
     ic = InfoOutlierDetector(gamma=0.4)
-    plot_common_routine([alg, ic], train_data, 'moon')    
+    plot_common_routine([('Elliptic Envelope', alg), ('Info-detection', ic)], train_data, 'moon')    
 
 def run_blob():
     train_data = generate_one_blob()
 
-
     alg = EllipticEnvelope(contamination=0.15)
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
-    plot_common_routine([alg, ic], train_data, 'blob')        
+    plot_common_routine([('Elliptic Envelope', alg), ('Info-detection', ic)], train_data, 'blob')        
     
 def plot_common_routine(alg_list, train_data, data_name):
     xx, yy = np.meshgrid(np.linspace(-7, 7, 150),
                      np.linspace(-7, 7, 150))
     num_of_alg = len(alg_list)                     
     plt.figure(figsize=(6*num_of_alg, 6))
-    for i, alg in enumerate(alg_list):
-        plt.subplot(1,num_of_alg,i)
-        y_pred = alg.fit_predict(train_data)
-        Z = alg.predict(np.c_[xx.ravel(), yy.ravel()])
+    for i, alg_tuple in enumerate(alg_list):
+        plt.subplot(1, num_of_alg, i+1)
+        alg_name, alg_class = alg_tuple
+        y_pred = alg_class.fit_predict(train_data)
+        Z = alg_class.predict(np.c_[xx.ravel(), yy.ravel()])
         Z = Z.reshape(xx.shape)    
         plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors='black')
         plt.scatter(train_data[y_pred==1,0], train_data[y_pred==1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
-        #plt.title('Elliptic Envelope')
-    #plt.title('info-detection')
+        plt.title(alg_name)
     plt.savefig('build/outlier_compare_%s.eps' % data_name) 
    
 if __name__ == '__main__':
