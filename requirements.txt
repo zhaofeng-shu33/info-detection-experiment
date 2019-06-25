@@ -1,0 +1,7 @@
+liac-arff
+pymongo
+sacred
+pandas
+numpy
+scikit-learn
+matplotlib

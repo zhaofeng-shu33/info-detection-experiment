@@ -22,7 +22,7 @@ def fetch_or_load_lymphography():
         data_archive_path = _fetch_remote(Lymphography)
         tf = tarfile.open(data_archive_path)
         tf.extractall(data_home)
-        remove(data_path)
+        remove(data_archive_path)
     f_descriptor = open(file_path, 'r')
     dataset = arff.load(f_descriptor)
     df = pd.DataFrame(dataset['data'])
