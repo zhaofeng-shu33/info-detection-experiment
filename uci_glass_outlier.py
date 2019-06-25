@@ -93,4 +93,4 @@ def fetch_uci_glass_outlier(data_home=None, shuffle=False, random_state=0,
 
     return (feature,target)
 if __name__ == '__main__':
-    fetch_uci_glass()
+    fetch_uci_glass_outlier()
