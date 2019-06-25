@@ -33,14 +33,16 @@ def TPR_TNR(y_true, y_pred):
 
 @ex.config
 def cfg():
-    alg_params = {'_gamma' : 0.2, 'contamination' : 0.04, 'n_neighbors' : 2}
+    alg_params = {'_gamma' : 0.1, 'contamination' : 0.04, 'n_neighbors' : 2, 'affinity' : 'laplacian'}
     alg = 'ic' # choices from ['ic', 'lof']
-    
+    verbose = True   
+ 
 @ex.automain
-def run(alg, alg_params):
+def run(alg, alg_params, verbose):
     data, labels = Glass()
     if(alg == 'ic'):
-        alg_instance = InfoOutlierDetector(gamma=alg_params['_gamma'])
+        alg_instance = InfoOutlierDetector(gamma=alg_params['_gamma'],
+            affinity=alg_params['affinity'])
     elif(alg == 'lof'):
         alg_instance = LocalOutlierFactor(n_neighbors=alg_params['n_neighbors'], 
             contamination=alg_params['contamination'])
@@ -48,7 +50,9 @@ def run(alg, alg_params):
         raise NameError(alg + ' name not found')
     
     y_predict = alg_instance.fit_predict(data)
+    if(alg == 'ic' and verbose):
+        print(alg_instance.partition_num_list)
     tpr, tnr = TPR_TNR(labels, y_predict)
     ex.log_scalar("tpr", tpr)        
     ex.log_scalar("tnr", tnr)    
-    print(tpr, tnr)    
+    return (tpr, tnr)    

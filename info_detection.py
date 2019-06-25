@@ -10,9 +10,8 @@ def statistic_get(int_list):
             dic[i] = 1
     return dic
 class InfoOutlierDetector(InfoCluster):
-    def __init__(self, gamma=1):
-        # currently only rbf metric is supported
-        super().__init__(gamma=gamma)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
     def fit(self, X):
         super().fit(X, use_psp_i=True)
         predict_cat = self.partition_num_list[-2]
@@ -40,6 +39,10 @@ class InfoOutlierDetector(InfoCluster):
         prediction_list: array-like shape (n_samples,), dtype=bool
         '''
         threshold = self.critical_values[-1]
+        if(self.affinity=='rbf'):
+            power_coeffient = 2
+        elif(self.affinity=='laplacian'):
+            power_coeffient = 1
         point_list_inner = point_list.reshape((point_list.shape[0], 1, point_list.shape[1]))
-        zero_one_format = np.sum(np.exp(-1.0 * np.linalg.norm(self.data-point_list_inner, axis=2)**2*self._gamma), axis=1) >= threshold;
+        zero_one_format = np.sum(np.exp(-1.0 * np.linalg.norm(self.data-point_list_inner, axis=2)**power_coeffient*self._gamma), axis=1) >= threshold;
         return (zero_one_format.astype(int) * 2 - 1)
