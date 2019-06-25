@@ -39,10 +39,10 @@ class InfoOutlierDetector(InfoCluster):
         prediction_list: array-like shape (n_samples,), dtype=bool
         '''
         threshold = self.critical_values[-1]
+        point_list_inner = point_list.reshape((point_list.shape[0], 1, point_list.shape[1]))        
         if(self.affinity=='rbf'):
-            power_coeffient = 2
+            norm_result = np.linalg.norm(self.data-point_list_inner, axis=2)**2
         elif(self.affinity=='laplacian'):
-            power_coeffient = 1
-        point_list_inner = point_list.reshape((point_list.shape[0], 1, point_list.shape[1]))
-        zero_one_format = np.sum(np.exp(-1.0 * np.linalg.norm(self.data-point_list_inner, axis=2)**power_coeffient*self._gamma), axis=1) >= threshold;
+            norm_result = np.linalg.norm(self.data-point_list_inner, axis=2, ord=1)
+        zero_one_format = np.sum(np.exp(-1.0 * norm_result*self._gamma), axis=1) >= threshold;
         return (zero_one_format.astype(int) * 2 - 1)

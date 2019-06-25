@@ -16,10 +16,11 @@ user_passwd = os.environ.get('SACRED_PASSWD', 'abc')
 collection_url = 'mongodb://%s:%s@127.0.0.1/?authSource=user-data'%(user_name, user_passwd)
 
 ex = Experiment('outlier_detection')
-
-ex.observers.append(MongoObserver.create(
-    url=collection_url,
-    db_name='sacred'))
+if(os.sys.platform != 'win32'):
+    ex.observers.append(MongoObserver.create(
+        url=collection_url,
+        db_name='sacred'))
+        
 def Glass():
     feature, ground_truth = fetch_uci_glass_outlier()
     feature = scale(feature)
