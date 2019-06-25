@@ -10,6 +10,7 @@ from sacred.observers import MongoObserver
 
 from info_detection import InfoOutlierDetector
 from uci_glass_outlier import fetch_uci_glass_outlier
+from lymphography_outlier import fetch_or_load_lymphography
 
 user_name = os.environ.get('SACRED_USER', 'admin')
 user_passwd = os.environ.get('SACRED_PASSWD', 'abc')
@@ -20,6 +21,10 @@ if(os.sys.platform != 'win32'):
     ex.observers.append(MongoObserver.create(
         url=collection_url,
         db_name='sacred'))
+
+def Lymphography():
+    feature, ground_truth = fetch_or_load_lymphography()
+    return (feature, ground_truth)
         
 def Glass():
     feature, ground_truth = fetch_uci_glass_outlier()
@@ -34,13 +39,20 @@ def TPR_TNR(y_true, y_pred):
 
 @ex.config
 def cfg():
-    alg_params = {'_gamma' : 0.1, 'contamination' : 0.04, 'n_neighbors' : 2, 'affinity' : 'laplacian'}
+    alg_params = {'_gamma' : 0.095, 'contamination' : 0.041, 'n_neighbors' : 62, 'affinity' : 'laplacian'}
     alg = 'ic' # choices from ['ic', 'lof']
     verbose = True   
+    dataset = 'Lymphography'
  
 @ex.automain
-def run(alg, alg_params, verbose):
-    data, labels = Glass()
+def run(dataset, alg, alg_params, verbose):
+    if(dataset == 'Glass'):
+        data, labels = Glass()
+    elif(dataset == 'Lymphography'):
+        data, labels = Lymphography()
+    else:
+        raise NameError(dataset + ' dataset name not foud')
+
     if(alg == 'ic'):
         alg_instance = InfoOutlierDetector(gamma=alg_params['_gamma'],
             affinity=alg_params['affinity'])
@@ -48,7 +60,7 @@ def run(alg, alg_params, verbose):
         alg_instance = LocalOutlierFactor(n_neighbors=alg_params['n_neighbors'], 
             contamination=alg_params['contamination'])
     else:
-        raise NameError(alg + ' name not found')
+        raise NameError(alg + ' algorithm name not found')
     
     y_predict = alg_instance.fit_predict(data)
     if(alg == 'ic' and verbose):
