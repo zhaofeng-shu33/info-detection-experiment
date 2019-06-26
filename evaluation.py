@@ -23,12 +23,7 @@ if(os.sys.platform != 'win32'):
 
  
 
-@ex.config
-def cfg():
-    alg_params = {'_gamma' : 0.003, 'contamination' : 0.041, 'n_neighbors' : 20, 'affinity' : ['rbf', 'nearest_neighbors']}
-    alg = 'ic' # choices from ['ic', 'lof']
-    verbose = True   
-    dataset = 'Glass'
+ex.add_config('conf.yaml')
  
 @ex.automain
 def run(dataset, alg, alg_params, verbose):
