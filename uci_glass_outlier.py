@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 """Glass Identification dataset.
 The original dataset description was available from 
     https://archive.ics.uci.edu/ml/datasets/glass+identification
@@ -16,7 +17,7 @@ from sklearn.datasets.base import get_data_home
 from sklearn.datasets.base import _fetch_remote
 from sklearn.datasets.base import RemoteFileMetadata
 from sklearn.datasets.base import _pkl_filepath
-from sklearn.utils import _joblib
+import joblib as _joblib
 from sklearn.utils import check_random_state, Bunch
 
 GLASS = RemoteFileMetadata(
