@@ -12,6 +12,7 @@ def statistic_get(int_list):
 class InfoOutlierDetector(InfoCluster):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
     def fit(self, X):
         super().fit(X, use_psp_i=True)
         predict_cat = self.partition_num_list[-2]
@@ -22,11 +23,15 @@ class InfoOutlierDetector(InfoCluster):
             if(v > label_max):
                 label_max = v
                 label_num = k
-        # save the training data for prediction use        
-        self.data = X[labels == label_num, :]
+        # save the training data for prediction use
+        filter_array = (labels == label_num)        
+        self.data = X[filter_array, :]
+        self.labels = (filter_array.astype(int) * 2 - 1)
+
     def fit_predict(self, X):
         self.fit(X)
-        return self.predict(X)
+        return self.labels
+
     def predict(self, point_list):
         '''predict whether the new data is outlier or not
         
