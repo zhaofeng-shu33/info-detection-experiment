@@ -39,10 +39,10 @@ def TPR_TNR(y_true, y_pred):
 
 @ex.config
 def cfg():
-    alg_params = {'_gamma' : 0.095, 'contamination' : 0.041, 'n_neighbors' : 62, 'affinity' : 'laplacian'}
+    alg_params = {'_gamma' : 0.003, 'contamination' : 0.041, 'n_neighbors' : 20, 'affinity' : ['rbf', 'nearest_neighbors']}
     alg = 'ic' # choices from ['ic', 'lof']
     verbose = True   
-    dataset = 'Lymphography'
+    dataset = 'Glass'
  
 @ex.automain
 def run(dataset, alg, alg_params, verbose):
@@ -55,7 +55,7 @@ def run(dataset, alg, alg_params, verbose):
 
     if(alg == 'ic'):
         alg_instance = InfoOutlierDetector(gamma=alg_params['_gamma'],
-            affinity=alg_params['affinity'])
+            affinity=alg_params['affinity'], n_neighbors=alg_params['n_neighbors'])
     elif(alg == 'lof'):
         alg_instance = LocalOutlierFactor(n_neighbors=alg_params['n_neighbors'], 
             contamination=alg_params['contamination'])
