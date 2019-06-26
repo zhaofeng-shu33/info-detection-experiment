@@ -11,10 +11,10 @@
         "lof": {
             "_gamma": 0.1,
             "contamination": 0.15,
-            "n_neighbors": 10,
+            "n_neighbors": 20,
             "affinity": "rbf",
-            "tpr": 0.9411764705882353,
-            "tnr": 0.6666666666666666
+            "tpr": 1.0,
+            "tnr": 1.0
         },
         "if": {
             "_gamma": 0.1,
@@ -99,8 +99,8 @@
             "contamination": 0.1,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.9024390243902439,
-            "tnr": 0.2222222222222222
+            "tpr": 0.8975609756097561,
+            "tnr": 0.1111111111111111
         }
     }
 }

@@ -6,6 +6,7 @@ numpy
 scikit-learn
 matplotlib
 info_cluster
+tabulate
 ete3
 networkx
 pyyaml
