@@ -1,0 +1,106 @@
+{
+    "GaussianBlob": {
+        "ic": {
+            "_gamma": 0.5,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 1.0,
+            "tnr": 1.0
+        },
+        "lof": {
+            "_gamma": 0.1,
+            "contamination": 0.15,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9411764705882353,
+            "tnr": 0.6666666666666666
+        },
+        "if": {
+            "_gamma": 0.1,
+            "contamination": 0.15,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 1.0,
+            "tnr": 1.0
+        }
+    },
+    "Moon": {
+        "ic": {
+            "_gamma": 0.4,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9433333333333334,
+            "tnr": 0.6
+        },
+        "lof": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 1.0,
+            "tnr": 0.7777777777777778
+        },
+        "if": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9833333333333333,
+            "tnr": 0.6666666666666666
+        }
+    },
+    "Lymphography": {
+        "ic": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.8309859154929577,
+            "tnr": 1.0
+        },
+        "lof": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9295774647887324,
+            "tnr": 0.8333333333333334
+        },
+        "if": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9366197183098591,
+            "tnr": 1.0
+        }
+    },
+    "Glass": {
+        "ic": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.7414634146341463,
+            "tnr": 0.5555555555555556
+        },
+        "lof": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9024390243902439,
+            "tnr": 0.2222222222222222
+        },
+        "if": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9024390243902439,
+            "tnr": 0.2222222222222222
+        }
+    }
+}

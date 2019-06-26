@@ -54,10 +54,10 @@ def make_table(dic, tb_name):
     for i in table:
         for k, v in dic[i[0]].items():
             tpr, tnr = v['tpr'], v['tnr']
-            i.append('%.2f/%.2f'%(tpr, tnr))
+            i.append('%.1f\\%%/%.1f\\%%'%(100*tpr, 100*tnr))
     _headers = ['TPR/FNR']
     _headers.extend([METHOD_FULL_NAME[i] for i in METHOD])
-    latex_table_string = tabulate(table, headers = _headers, tablefmt = 'latex_raw', floatfmt='.2f')
+    latex_table_string = tabulate(table, headers = _headers, tablefmt = 'latex_raw', floatfmt='.1f')
     # manually alignment change
     latex_table_string = latex_table_string.replace('llll','lp{2.5cm}p{3cm}p{3cm}')
     with open(os.path.join(BUILD_DIR, tb_name),'w') as f: 
@@ -69,25 +69,21 @@ if __name__ == '__main__':
     parser.add_argument('--ignore_computing', help='whether to ignore computing and use ari field in parameter file directly', default=False, type=bool, nargs='?', const=True)
     args = parser.parse_args()
     if(args.action == 'json'):
-        if not(os.path.exists(BUILD_DIR)):
-            os.mkdir(BUILD_DIR)
-        parameter_file_path = os.path.join(BUILD_DIR, PARAMETER_FILE)
-        if (os.path.exists(parameter_file_path)):
-            print("parameter file %s exists. Please remove it manually to regenerate."% parameter_file_path)
+        if (os.path.exists(PARAMETER_FILE)):
+            print("parameter file %s exists. Please remove it manually to regenerate."% PARAMETER_FILE)
         else:
-            with open(parameter_file_path, 'w') as f:
+            with open(PARAMETER_FILE, 'w') as f:
                 json_str = create_json()
                 f.write(json_str)
-            print('parameter files written to %s' % parameter_file_path)
+            print('parameter files written to %s' % PARAMETER_FILE)
     elif(args.action == 'tex'):
-        parameter_file_path = os.path.join(BUILD_DIR, PARAMETER_FILE)
-        if not (os.path.exists(parameter_file_path)):
-            print("parameter file %s not exists. Please generate it first."% parameter_file_path)
+        if not (os.path.exists(PARAMETER_FILE)):
+            print("parameter file %s not exists. Please generate it first."% PARAMETER_FILE)
         else:
-            with open(parameter_file_path) as f:
+            with open(PARAMETER_FILE) as f:
                 parameter_json = json.loads(f.read())        
             if not(args.ignore_computing):
                 run_experiment_matrix(parameter_json)
-                with open(parameter_file_path, 'w') as f:
+                with open(PARAMETER_FILE, 'w') as f:
                     f.write(json.dumps(parameter_json, indent=4))
             make_table(parameter_json, TABLE_NAME)
