@@ -11,3 +11,4 @@ ete3
 networkx
 pyyaml
 tabula
+scikit-optimize
