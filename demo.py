@@ -7,28 +7,27 @@ from sklearn.covariance import EllipticEnvelope
 from info_detection import InfoOutlierDetector
 from util import generate_one_blob, generate_two_moon
     
-def run_moon():
+def get_moon_configuration():
     train_data, _ = generate_two_moon()
 
     alg = EllipticEnvelope(contamination=0.15)
     ic = InfoOutlierDetector(gamma=0.4)
-    plot_common_routine([('Elliptic Envelope', alg), ('Info-detection', ic)], train_data, 'moon')    
+    return [('Info-detection', ic, train_data), ('Elliptic Envelope', alg, train_data)]
 
-def run_blob():
+def get_blob_configuration():
     train_data, _ = generate_one_blob()
 
-    alg = EllipticEnvelope(contamination=0.15)
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
-    plot_common_routine([('Elliptic Envelope', alg), ('Info-detection', ic)], train_data, 'blob')        
+    return [('Info-detection', ic, train_data)]  
     
-def plot_common_routine(alg_list, train_data, data_name):
+def plot_common_routine(combination):
     xx, yy = np.meshgrid(np.linspace(-7, 7, 150),
                      np.linspace(-7, 7, 150))
-    num_of_alg = len(alg_list)                     
+    num_of_alg = len(combination)                     
     plt.figure(figsize=(6*num_of_alg, 6))
-    for i, alg_tuple in enumerate(alg_list):
+    for i, combination_tuple in enumerate(combination):
         plt.subplot(1, num_of_alg, i+1)
-        alg_name, alg_class = alg_tuple
+        alg_name, alg_class, train_data = combination_tuple
         y_pred = alg_class.fit_predict(train_data)
         Z = alg_class.predict(np.c_[xx.ravel(), yy.ravel()])
         Z = Z.reshape(xx.shape)    
@@ -36,15 +35,16 @@ def plot_common_routine(alg_list, train_data, data_name):
         plt.scatter(train_data[y_pred==1,0], train_data[y_pred==1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
         plt.title(alg_name)
-    plt.savefig('build/outlier_compare_%s.eps' % data_name) 
+    plt.savefig('build/outlier_boundary_illustration.eps') 
    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', default='all', choices=['all', 'blob', 'moon'])
     args = parser.parse_args()
+    combination_list = []
     if(args.dataset == 'all' or args.dataset == 'blob'):
-        run_blob()
+        combination_list.extend(get_blob_configuration())
     if(args.dataset == 'all' or args.dataset == 'moon'):
-        run_moon()
-    
+        combination_list.extend(get_moon_configuration())
+    plot_common_routine(combination_list)
 
