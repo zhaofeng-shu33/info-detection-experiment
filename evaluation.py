@@ -3,11 +3,13 @@ import pdb
 
 import numpy as np
 from sklearn.neighbors import LocalOutlierFactor
+from sklearn.ensemble import IsolationForest
 from sacred import Experiment
 from sacred.observers import MongoObserver
 
 from util import TPR_TNR
 from util import Lymphography, Glass
+from util import generate_one_blob, generate_two_moon
 
 from info_detection import InfoOutlierDetector
 
@@ -26,11 +28,15 @@ if(os.sys.platform != 'win32'):
 ex.add_config('conf.yaml')
  
 @ex.automain
-def run(dataset, alg, alg_params, verbose):
+def run(dataset, alg, alg_params, verbose, seed):
     if(dataset == 'Glass'):
         data, labels = Glass()
     elif(dataset == 'Lymphography'):
         data, labels = Lymphography()
+    elif(dataset == 'GaussianBlob'):
+        data, labels = generate_one_blob()
+    elif(dataset == 'Moon'):
+        data, labels = generate_two_moon()
     else:
         raise NameError(dataset + ' dataset name not foud')
 
@@ -40,8 +46,12 @@ def run(dataset, alg, alg_params, verbose):
     elif(alg == 'lof'):
         alg_instance = LocalOutlierFactor(n_neighbors=alg_params['n_neighbors'], 
             contamination=alg_params['contamination'])
+    elif(alg == 'if'):
+        alg_instance = IsolationForest(contamination=alg_params['contamination'], 
+            behaviour='new', random_state=seed) 
     else:
         raise NameError(alg + ' algorithm name not found')
+        
     y_predict = alg_instance.fit_predict(data)
     if(alg == 'ic' and verbose):
         print(alg_instance.partition_num_list)

@@ -1,10 +1,8 @@
 alg_params:
-    _gamma: 0.003
-    contamination: 0.041
+    _gamma: 0.4
+    contamination: 0.15
     n_neighbors: 20
-    affinity: 
-        - rbf
-        - nearest_neighbors
-alg: ic
+    affinity: rbf
+alg: if
 verbose: true
-dataset: Glass         
+dataset: GaussianBlob         

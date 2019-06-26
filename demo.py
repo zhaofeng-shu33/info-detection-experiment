@@ -1,54 +1,21 @@
-from sklearn.datasets import make_blobs, make_moons
+import argparse
+
 import matplotlib.pyplot as plt
 import numpy as np
-from info_detection import InfoOutlierDetector
 from sklearn.covariance import EllipticEnvelope
-import argparse
-def generate_one_blob():
-    '''
-       generate training data with (300,2)
-    '''
-    n_samples = 300
-    outliers_fraction = 0.15
-    n_outliers = int(outliers_fraction * n_samples)
-    n_inliers = n_samples - n_outliers
-    blobs_params = dict(random_state=0, n_samples=n_inliers, n_features=2)
-    data, labels = make_blobs(centers=[[0, 0], [0, 0]], cluster_std=0.5,
-               **blobs_params)
-    rng = np.random.RandomState(42)
-    outlier_data = rng.uniform(low=-6, high=6, size=(n_outliers, 2))
-    total_data = np.vstack((data, outlier_data))
-    return total_data
 
-def generate_two_moon():
-    n_samples = 300
-    outliers_fraction = 0.15
-    n_outliers = int(outliers_fraction * n_samples)    
-    data = 4. * (make_moons(n_samples=n_samples, noise=.05, random_state=0)[0] -
-              np.array([0.5, 0.25]))
-    rng = np.random.RandomState(34)              
-    outlier_data = rng.uniform(low=-6, high=6,
-                           size=(n_outliers, 2))
-    # make real outlier
-    outlier_data[22,1] = 1.5
-    outlier_data[30,0] = -1
-    outlier_data[23,1] = -4
-    outlier_data[31,1] = -3.9
-    outlier_data[1,1] = 0.1
-    outlier_data[1,0] = -0.1
-    outlier_data[10,1] = 2                           
-    total_data = np.vstack((data, outlier_data))
-    return total_data
+from info_detection import InfoOutlierDetector
+from util import generate_one_blob, generate_two_moon
     
 def run_moon():
-    train_data = generate_two_moon()
+    train_data, _ = generate_two_moon()
 
     alg = EllipticEnvelope(contamination=0.15)
     ic = InfoOutlierDetector(gamma=0.4)
     plot_common_routine([('Elliptic Envelope', alg), ('Info-detection', ic)], train_data, 'moon')    
 
 def run_blob():
-    train_data = generate_one_blob()
+    train_data, _ = generate_one_blob()
 
     alg = EllipticEnvelope(contamination=0.15)
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
