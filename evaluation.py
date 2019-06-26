@@ -18,7 +18,7 @@ user_passwd = os.environ.get('SACRED_PASSWD', 'abc')
 collection_url = 'mongodb://%s:%s@127.0.0.1/?authSource=user-data'%(user_name, user_passwd)
 
 ex = Experiment('outlier_detection')
-if(os.sys.platform != 'win32'):
+if(os.sys.platform != 'win32' and os.environ.get('USE_MONGO')):
     ex.observers.append(MongoObserver.create(
         url=collection_url,
         db_name='sacred'))
