@@ -50,8 +50,8 @@
             "contamination": 0.13,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.96,
-            "tnr": 0.7333333333333333
+            "tpr": 0.9633333333333334,
+            "tnr": 0.7555555555555555
         }
     },
     "Lymphography": {

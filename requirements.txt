@@ -1,7 +1,8 @@
+joblib
 liac-arff
 pymongo
 sacred
-pandas
+pandas>=0.24
 numpy
 scikit-learn
 matplotlib
