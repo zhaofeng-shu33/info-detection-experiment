@@ -12,13 +12,13 @@ def get_moon_configuration():
 
     alg = EllipticEnvelope(contamination=0.15)
     ic = InfoOutlierDetector(gamma=0.4)
-    return [('Info-detection', ic, train_data), ('Elliptic Envelope', alg, train_data)]
+    return [('Info-Detection', ic, train_data), ('Elliptic Envelope', alg, train_data)]
 
 def get_blob_configuration():
     train_data, _ = generate_one_blob()
 
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
-    return [('Info-detection', ic, train_data)]  
+    return [('Info-Detection', ic, train_data)]  
     
 def plot_common_routine(combination):
     xx, yy = np.meshgrid(np.linspace(-7, 7, 150),
@@ -34,7 +34,7 @@ def plot_common_routine(combination):
         plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors='black')
         plt.scatter(train_data[y_pred==1,0], train_data[y_pred==1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
-        plt.title(alg_name)
+        plt.title(alg_name, fontsize=20)
     plt.savefig('build/outlier_boundary_illustration.eps') 
    
 if __name__ == '__main__':

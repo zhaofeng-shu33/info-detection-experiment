@@ -21,8 +21,8 @@
             "contamination": 0.15,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.996078431372549,
-            "tnr": 0.9777777777777777
+            "tpr": 1.0,
+            "tnr": 1.0
         }
     },
     "Moon": {
@@ -50,33 +50,33 @@
             "contamination": 0.13,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.9633333333333334,
-            "tnr": 0.7555555555555555
+            "tpr": 0.96,
+            "tnr": 0.7333333333333333
         }
     },
     "Lymphography": {
         "ic": {
             "_gamma": 0.1,
             "contamination": 0.1,
-            "n_neighbors": 10,
-            "affinity": "rbf",
-            "tpr": 0.8309859154929577,
+            "n_neighbors": 60,
+            "affinity": "laplacian",
+            "tpr": 0.9788732394366197,
             "tnr": 1.0
         },
         "lof": {
             "_gamma": 0.1,
-            "contamination": 0.1,
-            "n_neighbors": 10,
+            "contamination": 0.041,
+            "n_neighbors": 60,
             "affinity": "rbf",
-            "tpr": 0.9295774647887324,
+            "tpr": 0.9859154929577465,
             "tnr": 0.8333333333333334
         },
         "if": {
             "_gamma": 0.1,
-            "contamination": 0.1,
+            "contamination": 0.041,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.9366197183098591,
+            "tpr": 0.9929577464788732,
             "tnr": 1.0
         }
     },

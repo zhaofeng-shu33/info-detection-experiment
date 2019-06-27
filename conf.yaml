@@ -1,8 +1,8 @@
 alg_params:
     _gamma: 0.4
-    contamination: 0.15
+    contamination: 0.041
     n_neighbors: 20
     affinity: rbf
 alg: if
 verbose: true
-dataset: GaussianBlob         
+dataset: Lymphography         
