@@ -26,19 +26,19 @@
         },
         "ee": {
             "_gamma": 0.1,
-            "contamination": 0.1,
+            "contamination": 0.15,
             "n_neighbors": 10,
             "affinity": "rbf",
             "tpr": 1.0,
-            "tnr": 0.6666666666666666
+            "tnr": 1.0
         },
         "svm": {
             "_gamma": 0.1,
-            "contamination": 0.1,
+            "contamination": 0.15,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.9215686274509803,
-            "tnr": 0.5555555555555556
+            "tpr": 0.9882352941176471,
+            "tnr": 0.9111111111111111
         }
     },
     "Moon": {
@@ -71,7 +71,7 @@
         },
         "ee": {
             "_gamma": 0.1,
-            "contamination": 0.1,
+            "contamination": 0.13,
             "n_neighbors": 10,
             "affinity": "rbf",
             "tpr": 0.94,
@@ -79,7 +79,7 @@
         },
         "svm": {
             "_gamma": 0.1,
-            "contamination": 0.1,
+            "contamination": 0.13,
             "n_neighbors": 10,
             "affinity": "rbf",
             "tpr": 0.9533333333333334,
