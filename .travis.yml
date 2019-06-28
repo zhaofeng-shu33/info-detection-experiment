@@ -4,6 +4,8 @@ language: python
 cache: pip
 install:
   - pip install -r requirements.txt
+  - pip install oss2
 script:
   - python demo.py --figure_suffix svg
-  - python schema.py
+  - python schema.py --table_format html
+  - python upload.py
