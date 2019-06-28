@@ -21,7 +21,7 @@ TABLE_NAME = 'id_compare'
 DATASET = ['GaussianBlob', 'Moon', 'Lymphography', 'Glass']
 METHOD = ['ic', 'lof', 'if', 'ee', 'svm']
 METHOD_FULL_NAME = {'ic': 'Info-Detection', 'lof': 'local outlier factor', 
-    'if': 'isolation forest', 'ee': 'elliptic envelope', 'svm': 'one class svm'}
+    'if': 'isolation forest', 'ee': 'elliptic envelope', 'svm': 'one class SVM'}
 ALG_PARAMS = {'_gamma': 0.1, 'contamination': 0.1, 'n_neighbors': 10, 'affinity': 'rbf'}
 
 def update_json(json_str=None):
