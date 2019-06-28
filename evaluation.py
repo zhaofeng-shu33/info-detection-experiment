@@ -26,9 +26,16 @@ if(os.sys.platform != 'win32' and os.environ.get('USE_MONGO')):
         db_name='sacred'))
 
  
-
-ex.add_config('conf.yaml')
- 
+if(os.path.exists('conf.yaml')):
+    ex.add_config('conf.yaml')
+else:
+    ex_param_dic = {
+        'alg_params': {'_gamma': 0.5, 'n_neighbors': 10, 'affinity': 'rbf'},
+        'verbose': False,
+        'alg': 'ic',
+        'dataset': 'GaussianBlob'
+    }
+    ex.add_config(**ex_param_dic)
 @ex.automain
 def run(dataset, alg, alg_params, verbose, seed):
     if(dataset == 'Glass'):

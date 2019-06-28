@@ -45,8 +45,9 @@ def run_experiment_matrix(parameter_dic):
             }
             r = ex.run(config_updates= ex_param_dic)
             tpr, tnr = r.result
-            v1['tpr'] = tpr
-            v1['tnr'] = tnr
+            if(tpr >= v1['tpr'] and tnr >= v1['tnr']):
+                v1['tpr'] = tpr
+                v1['tnr'] = tnr
 
 def make_table(dic, tb_name):
     global METHOD, METHOD_FULL_NAME, BUILD_DIR
@@ -60,6 +61,8 @@ def make_table(dic, tb_name):
     latex_table_string = tabulate(table, headers = _headers, tablefmt = 'latex_raw', floatfmt='.1f')
     # manually alignment change
     latex_table_string = latex_table_string.replace('llll','lp{2.5cm}p{3cm}p{3cm}')
+    if not(os.path.exists(BUILD_DIR)):
+        os.mkdir(BUILD_DIR)
     with open(os.path.join(BUILD_DIR, tb_name),'w') as f: 
         f.write(latex_table_string)
         
