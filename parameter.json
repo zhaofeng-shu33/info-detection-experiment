@@ -23,6 +23,22 @@
             "affinity": "rbf",
             "tpr": 1.0,
             "tnr": 1.0
+        },
+        "ee": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 1.0,
+            "tnr": 0.6666666666666666
+        },
+        "svm": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9215686274509803,
+            "tnr": 0.5555555555555556
         }
     },
     "Moon": {
@@ -52,6 +68,22 @@
             "affinity": "rbf",
             "tpr": 0.9666666666666667,
             "tnr": 0.7777777777777778
+        },
+        "ee": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.94,
+            "tnr": 0.37777777777777777
+        },
+        "svm": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9533333333333334,
+            "tnr": 0.4444444444444444
         }
     },
     "Lymphography": {
@@ -78,6 +110,22 @@
             "affinity": "rbf",
             "tpr": 0.9929577464788732,
             "tnr": 1.0
+        },
+        "ee": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9366197183098591,
+            "tnr": 1.0
+        },
+        "svm": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9295774647887324,
+            "tnr": 0.6666666666666666
         }
     },
     "Glass": {
@@ -105,8 +153,24 @@
             "contamination": 0.1,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.8975609756097561,
-            "tnr": 0.1111111111111111
+            "tpr": 0.9024390243902439,
+            "tnr": 0.2222222222222222
+        },
+        "ee": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.8926829268292683,
+            "tnr": 0.0
+        },
+        "svm": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf",
+            "tpr": 0.9170731707317074,
+            "tnr": 0.2222222222222222
         }
     }
 }

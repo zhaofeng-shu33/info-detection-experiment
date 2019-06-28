@@ -1,6 +1,6 @@
 '''
 This script has two purposes
-1. generate parameter.json, which can be edited to use the optimal parameter
+1. generate or update parameter.json, which can be edited to use the optimal parameter
 2. generate latex table, which is used in the paper. The generation can simply read the data
    from parameter.json or run the experiments to get the parameter
 '''
@@ -8,6 +8,7 @@ import json
 import os
 import random
 import argparse
+import pdb
 
 import numpy as np
 from tabulate import tabulate
@@ -18,20 +19,24 @@ BUILD_DIR = 'build'
 PARAMETER_FILE = 'parameter.json'
 TABLE_NAME = 'id_compare'
 DATASET = ['GaussianBlob', 'Moon', 'Lymphography', 'Glass']
-METHOD = ['ic', 'lof', 'if']
-METHOD_FULL_NAME = {'ic': 'Info-Detection', 'lof': 'local outlier factor', 'if': 'isolation forest'}
+METHOD = ['ic', 'lof', 'if', 'ee', 'svm']
+METHOD_FULL_NAME = {'ic': 'Info-Detection', 'lof': 'local outlier factor', 
+    'if': 'isolation forest', 'ee': 'elliptic envelope', 'svm': 'one class svm'}
 ALG_PARAMS = {'_gamma': 0.1, 'contamination': 0.1, 'n_neighbors': 10, 'affinity': 'rbf'}
 
-def create_json():
-    '''update tuning json string
-    '''
-    global DATASET, DATASET
-    dic = {}
+def update_json(json_str=None):
+    global DATASET, ALG_PARAMS, METHOD
+    if(json_str):
+        dic = json.loads(json_str)
+    else:
+        dic = {}
     for dataset in DATASET:
-        dic[dataset] = {}
+        if not(dic.get(dataset)):
+            dic[dataset] = {}
         dic_dataset = dic[dataset]
         for method in METHOD:
-            dic_dataset[method] = ALG_PARAMS
+            if not(dic_dataset.get(method)):
+                dic_dataset[method] = ALG_PARAMS            
     return json.dumps(dic, indent=4)                
 
 def run_experiment_matrix(parameter_dic):
@@ -45,19 +50,22 @@ def run_experiment_matrix(parameter_dic):
             }
             r = ex.run(config_updates= ex_param_dic)
             tpr, tnr = r.result
-            if(tpr >= v1['tpr'] and tnr >= v1['tnr']):
+            if not(v1.get('tpr', False) and v1.get('tnr', False)):
+                v1['tpr'] = tpr
+                v1['tnr'] = tnr
+            elif(tpr >= v1['tpr'] and tnr >= v1['tnr']):
                 v1['tpr'] = tpr
                 v1['tnr'] = tnr
 
 def make_table(dic, tb_name, format):
-    global METHOD, METHOD_FULL_NAME, BUILD_DIR
-    table = [[i] for i in dic.keys()]
-    for i in table:
-        for k, v in dic[i[0]].items():
+    global METHOD, METHOD_FULL_NAME, DATASET, BUILD_DIR
+    table = [[METHOD_FULL_NAME[i]] for i in METHOD]
+    for dataset_method in dic.values():
+        for index, v in enumerate(dataset_method.values()):
             tpr, tnr = v['tpr'], v['tnr']
-            i.append('%.1f\\%%/%.1f\\%%'%(100*tpr, 100*tnr))
+            table[index].append('%.1f\\%%/%.1f\\%%'%(100*tpr, 100*tnr))
     _headers = ['TPR/FNR']
-    _headers.extend([METHOD_FULL_NAME[i] for i in METHOD])
+    _headers.extend([i for i in DATASET])
     table_string = tabulate(table, headers = _headers, tablefmt = format, floatfmt='.1f')
     # manually alignment change
     if(format == 'latex_raw'):
@@ -81,12 +89,13 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if(args.action == 'json'):
         if (os.path.exists(PARAMETER_FILE)):
-            print("parameter file %s exists. Please remove it manually to regenerate."% PARAMETER_FILE)
+            json_str = open(PARAMETER_FILE).read()
         else:
-            with open(PARAMETER_FILE, 'w') as f:
-                json_str = create_json()
-                f.write(json_str)
-            print('parameter files written to %s' % PARAMETER_FILE)
+            json_str = None            
+        with open(PARAMETER_FILE, 'w') as f:
+            json_str_new = update_json(json_str)
+            f.write(json_str_new)
+        print('parameter files written to %s' % PARAMETER_FILE)
     elif(args.action == 'table'):
         if not (os.path.exists(PARAMETER_FILE)):
             print("parameter file %s not exists. Please generate it first."% PARAMETER_FILE)

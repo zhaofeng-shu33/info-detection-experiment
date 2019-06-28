@@ -60,6 +60,9 @@ def run(dataset, alg, alg_params, verbose, seed):
             behaviour='new', random_state=seed)
     elif(alg == 'ee'):
         alg_instance = EllipticEnvelope(contamination=alg_params['contamination'], random_state=seed)
+    elif(alg == 'svm'):
+        alg_instance = OneClassSVM(kernel=alg_params['affinity'], 
+            gamma=alg_params['_gamma'], nu=alg_params['contamination'])
     else:
         raise NameError(alg + ' algorithm name not found')
         
