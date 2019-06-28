@@ -19,7 +19,7 @@ PARAMETER_FILE = 'parameter.json'
 TABLE_NAME = 'id_compare.tex'
 DATASET = ['GaussianBlob', 'Moon', 'Lymphography', 'Glass']
 METHOD = ['ic', 'lof', 'if']
-METHOD_FULL_NAME = {'ic': 'info-detection', 'lof': 'local outlier factor', 'if': 'isolation forest'}
+METHOD_FULL_NAME = {'ic': 'Info-Detection', 'lof': 'local outlier factor', 'if': 'isolation forest'}
 ALG_PARAMS = {'_gamma': 0.1, 'contamination': 0.1, 'n_neighbors': 10, 'affinity': 'rbf'}
 
 def create_json():
