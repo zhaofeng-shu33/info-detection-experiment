@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/zhaofeng-shu33/info-detection-experiment.svg?branch=master)](https://travis-ci.com/zhaofeng-shu33/info-detection-experiment)
+
 # Overview
 
 This experiment focuses on comparing the detection results of info-detection with other methods on artificial and real-world dataset.
