@@ -1,4 +1,5 @@
 import argparse
+import os
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,7 +21,7 @@ def get_blob_configuration():
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
     return [('Info-Detection', ic, train_data)]  
     
-def plot_common_routine(combination):
+def plot_common_routine(combination, suffix):
     xx, yy = np.meshgrid(np.linspace(-7, 7, 150),
                      np.linspace(-7, 7, 150))
     num_of_alg = len(combination)                     
@@ -35,17 +36,20 @@ def plot_common_routine(combination):
         plt.scatter(train_data[y_pred==1,0], train_data[y_pred==1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
         plt.title(alg_name, fontsize=20)
-    plt.tight_layout()    
-    plt.savefig('build/outlier_boundary_illustration.eps') 
+    plt.tight_layout()  
+    if not(os.path.exists('build')):
+        os.mkdir('build')    
+    plt.savefig('build/outlier_boundary_illustration.' + suffix) 
    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', default='all', choices=['all', 'blob', 'moon'])
+    parser.add_argument('--figure_suffix', default='eps', choices=['eps', 'pdf', 'svg'])    
     args = parser.parse_args()
     combination_list = []
     if(args.dataset == 'all' or args.dataset == 'blob'):
         combination_list.extend(get_blob_configuration())
     if(args.dataset == 'all' or args.dataset == 'moon'):
         combination_list.extend(get_moon_configuration())
-    plot_common_routine(combination_list)
+    plot_common_routine(combination_list, args.figure_suffix)
 

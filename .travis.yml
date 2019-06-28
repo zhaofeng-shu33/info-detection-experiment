@@ -1,0 +1,9 @@
+os: linux
+dist: xenial
+language: python
+cache: pip
+install:
+  - pip install --user -r requirements.txt
+script:
+  - python demo.py --figure_suffix svg
+  - python schema.py
