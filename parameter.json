@@ -158,10 +158,10 @@
         },
         "ee": {
             "_gamma": 0.1,
-            "contamination": 0.1,
+            "contamination": 0.05,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.8926829268292683,
+            "tpr": 0.9463414634146341,
             "tnr": 0.0
         },
         "svm": {
