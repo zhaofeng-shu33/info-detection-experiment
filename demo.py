@@ -35,6 +35,7 @@ def plot_common_routine(combination):
         plt.scatter(train_data[y_pred==1,0], train_data[y_pred==1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
         plt.title(alg_name, fontsize=20)
+    plt.tight_layout()    
     plt.savefig('build/outlier_boundary_illustration.eps') 
    
 if __name__ == '__main__':
