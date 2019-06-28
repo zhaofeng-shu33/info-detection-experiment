@@ -4,6 +4,8 @@ import pdb
 import numpy as np
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.ensemble import IsolationForest
+from sklearn.svm import OneClassSVM
+from sklearn.covariance import EllipticEnvelope
 from sacred import Experiment
 from sacred.observers import MongoObserver
 
@@ -48,7 +50,9 @@ def run(dataset, alg, alg_params, verbose, seed):
             contamination=alg_params['contamination'])
     elif(alg == 'if'):
         alg_instance = IsolationForest(contamination=alg_params['contamination'], 
-            behaviour='new', random_state=seed) 
+            behaviour='new', random_state=seed)
+    elif(alg == 'ee'):
+        alg_instance = EllipticEnvelope(contamination=alg_params['contamination'], random_state=seed)
     else:
         raise NameError(alg + ' algorithm name not found')
         
