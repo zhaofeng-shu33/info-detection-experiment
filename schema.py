@@ -66,10 +66,8 @@ def make_table(dic, tb_name, format):
             table[index].append('%.1f\\%%/%.1f\\%%'%(100*tpr, 100*tnr))
     _headers = ['TPR/FNR']
     _headers.extend([i for i in DATASET])
-    table_string = tabulate(table, headers = _headers, tablefmt = format, floatfmt='.1f')
-    # manually alignment change
-    if(format == 'latex_raw'):
-        table_string = table_string.replace('llll','lp{2.5cm}p{3cm}p{3cm}')
+    align_list = ['center' for i in range(len(_headers))]
+    table_string = tabulate(table, headers = _headers, tablefmt = format, floatfmt='.1f', colalign=align_list)
     if not(os.path.exists(BUILD_DIR)):
         os.mkdir(BUILD_DIR)
         

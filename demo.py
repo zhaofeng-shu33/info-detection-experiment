@@ -13,19 +13,20 @@ def get_moon_configuration():
 
     alg = EllipticEnvelope(contamination=0.15)
     ic = InfoOutlierDetector(gamma=0.4)
-    return [('Info-Detection', ic, train_data), ('Elliptic Envelope', alg, train_data)]
+    return [('Info-Detection on Moon', ic, train_data), ('Elliptic Envelope on Moon', alg, train_data)]
 
 def get_blob_configuration():
     train_data, _ = generate_one_blob()
 
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
-    return [('Info-Detection', ic, train_data)]  
+    return [('Info-Detection on GaussianBlob', ic, train_data)]  
     
 def plot_common_routine(combination, suffix):
     xx, yy = np.meshgrid(np.linspace(-7, 7, 150),
                      np.linspace(-7, 7, 150))
     num_of_alg = len(combination)                     
     plt.figure(figsize=(6*num_of_alg, 6))
+    label_text = ['(a)', '(b)', '(c)']
     for i, combination_tuple in enumerate(combination):
         plt.subplot(1, num_of_alg, i+1)
         alg_name, alg_class, train_data = combination_tuple
@@ -35,6 +36,7 @@ def plot_common_routine(combination, suffix):
         plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors='black')
         plt.scatter(train_data[y_pred==1,0], train_data[y_pred==1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
+        plt.xlabel(label_text[i], fontsize=20)
         plt.title(alg_name, fontsize=20)
     plt.tight_layout()  
     if not(os.path.exists('build')):
