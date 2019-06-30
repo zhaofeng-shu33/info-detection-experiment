@@ -73,6 +73,7 @@ def make_table(dic, tb_name, format):
         
     if(format == 'latex_raw'):
         table_suffix = '.tex'
+        table_string = table_string.replace('100.0','100')
     elif(format == 'html'):
         table_suffix = '.html'
         
