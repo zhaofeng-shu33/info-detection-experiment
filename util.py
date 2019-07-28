@@ -7,9 +7,9 @@ from uci_glass_outlier import fetch_uci_glass_outlier
 from lymphography_outlier import fetch_or_load_lymphography
 
 def TPR_TNR(y_true, y_pred):
-    cm = confusion_matrix(y_true, y_pred)
-    tpr = cm[1,1]/(cm[1,1] + cm[1,0])
-    tnr = cm[0,0]/(cm[0,0] + cm[0,1])
+    cm = confusion_matrix(y_true, y_pred) # [[tn, fp],[fn, tp]]
+    tpr = cm[1,1]/(cm[1,1] + cm[1,0]) # tp / (tp + fn)
+    tnr = cm[0,0]/(cm[0,0] + cm[0,1]) # tn / (tn + fp)
     return (tpr, tnr)
     
 def Lymphography():
