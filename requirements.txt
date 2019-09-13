@@ -3,12 +3,8 @@ liac-arff
 pymongo
 sacred
 pandas>=0.24
-numpy
-scikit-learn
 matplotlib
 info_cluster
 tabulate
-ete3
-networkx
 pyyaml
 scikit-optimize

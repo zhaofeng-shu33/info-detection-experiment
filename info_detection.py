@@ -15,7 +15,7 @@ class InfoOutlierDetector(InfoCluster):
 
     def fit(self, X):
         super().fit(X)
-        predict_cat = self.partition_num_list[-2]
+        predict_cat = len(self.partition_list[-2])
         labels = np.asarray(self.get_category(predict_cat))
         dic = statistic_get(labels)
         label_max = -1
