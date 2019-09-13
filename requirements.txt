@@ -5,6 +5,6 @@ sacred
 pandas>=0.24
 matplotlib
 info_cluster
-tabulate
+tabulate>=0.8.3
 pyyaml
 scikit-optimize
