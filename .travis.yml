@@ -8,4 +8,3 @@ install:
 script:
   - python demo.py --figure_suffix svg
   - python schema.py --table_format html
-  - python upload.py
