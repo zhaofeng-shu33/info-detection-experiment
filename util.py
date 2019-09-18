@@ -30,7 +30,7 @@ def generate_one_blob():
     n_outliers = int(outliers_fraction * n_samples)
     n_inliers = n_samples - n_outliers
     blobs_params = dict(random_state=0, n_samples=n_inliers, n_features=2)
-    data, labels = make_blobs(centers=[[0, 0], [0, 0]], cluster_std=0.5,
+    data, labels = make_blobs(centers=[[0, 0]], cluster_std=0.5,
                **blobs_params)
     rng = np.random.RandomState(42)
     outlier_data = rng.uniform(low=-6, high=6, size=(n_outliers, 2))
