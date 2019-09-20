@@ -45,9 +45,16 @@ class InfoOutlierDetector(InfoCluster):
         '''
         threshold = self.critical_values[-1]
         point_list_inner = point_list.reshape((point_list.shape[0], 1, point_list.shape[1]))        
-        if(self.affinity=='rbf'):
+        if(self.affinity == 'rbf'):
             norm_result = np.linalg.norm(self.data-point_list_inner, axis=2)**2
-        elif(self.affinity=='laplacian'):
+        elif(self.affinity == 'laplacian'):
             norm_result = np.linalg.norm(self.data-point_list_inner, axis=2, ord=1)
+        elif isinstance(self.affinity, list) and self.affinity.count('neareast_neighbors') > 0 and self.affinity.count('rbf') > 0:
+            norm_result = np.linalg.norm(self.data-point_list_inner, axis=2)**2
+            norm_result.sort(axis=1)
+            k = self.n_neighbors
+            norm_result = norm_result[:,-k:]
+        else:
+            raise NotImplementedError('unsupported affinity provided')
         zero_one_format = np.sum(np.exp(-1.0 * norm_result*self._gamma), axis=1) >= threshold;
         return (zero_one_format.astype(int) * 2 - 1)
