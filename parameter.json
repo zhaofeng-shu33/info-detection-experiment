@@ -50,7 +50,7 @@
                 "rbf",
                 "nearest_neighbors"
             ],
-            "tpr": 1.0,
+            "tpr": 0.5,
             "tnr": 1.0
         },
         "lof": {
@@ -66,24 +66,24 @@
             "contamination": 0.13,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.9666666666666667,
-            "tnr": 0.7777777777777778
+            "tpr": 0.9533333333333334,
+            "tnr": 0.6888888888888889
         },
         "ee": {
             "_gamma": 0.1,
             "contamination": 0.13,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.94,
-            "tnr": 0.37777777777777777
+            "tpr": 0.9133333333333333,
+            "tnr": 0.4222222222222222
         },
         "svm": {
             "_gamma": 0.1,
             "contamination": 0.13,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.9533333333333334,
-            "tnr": 0.4444444444444444
+            "tpr": 0.93,
+            "tnr": 0.5555555555555556
         }
     },
     "Lymphography": {
@@ -137,8 +137,8 @@
                 "rbf",
                 "nearest_neighbors"
             ],
-            "tpr": 0.9317073170731708,
-            "tnr": 0.3333333333333333
+            "tpr": 0.33170731707317075,
+            "tnr": 1.0
         },
         "lof": {
             "_gamma": 0.1,

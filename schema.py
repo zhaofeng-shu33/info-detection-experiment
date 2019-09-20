@@ -53,7 +53,7 @@ def run_experiment_matrix(parameter_dic):
             if not(v1.get('tpr', False) and v1.get('tnr', False)):
                 v1['tpr'] = tpr
                 v1['tnr'] = tnr
-            elif(tpr >= v1['tpr'] and tnr >= v1['tnr']):
+            elif(abs(tpr - v1['tpr']) > 0.01 or abs(tnr - v1['tnr']) > 0.01):
                 v1['tpr'] = tpr
                 v1['tnr'] = tnr
 
