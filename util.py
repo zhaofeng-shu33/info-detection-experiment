@@ -7,6 +7,7 @@ from sklearn.datasets import make_blobs, make_moons
 
 from uci_glass_outlier import fetch_uci_glass_outlier
 from lymphography_outlier import fetch_or_load_lymphography
+from ionosphere_outlier import fetch_or_load_Ionosphere
 
 BUILD_DIR = 'build'
 PARAMETER_FILE = 'parameter.json'
@@ -37,7 +38,11 @@ def TPR_TNR(y_true, y_pred):
 def Lymphography():
     feature, ground_truth = fetch_or_load_lymphography()
     return (feature, ground_truth)
-        
+
+def Ionosphere():
+    feature, ground_truth = fetch_or_load_Ionosphere()
+    return (feature, ground_truth)
+
 def Glass():
     feature, ground_truth = fetch_uci_glass_outlier()
     feature = scale(feature)

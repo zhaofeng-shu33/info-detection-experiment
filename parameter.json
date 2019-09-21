@@ -169,5 +169,57 @@
             "tpr": 0.9170731707317074,
             "tnr": 0.2222222222222222
         }
+    },
+    "Ionosphere": {
+        "ic": {
+            "_gamma": 0.29,
+            "contamination": 0.359,
+            "n_neighbors": 50,
+            "affinity": "rbf",
+            "tpr": 0.9066666666666666,
+            "tnr": 0.48412698412698413
+        },
+        "lof": {
+            "_gamma": 0.047,
+            "contamination": 0.359,
+            "n_neighbors": 9,
+            "affinity": [
+                "rbf",
+                "nearest_neighbors",
+                "reweight"
+            ],
+            "tpr": 0.9022222222222223,
+            "tnr": 0.8253968253968254
+        },
+        "if": {
+            "_gamma": 0.29,
+            "contamination": 0.359,
+            "n_neighbors": 290,
+            "affinity": [
+                "rbf",
+                "nearest_neighbors"
+            ],
+            "tpr": 0.8044444444444444,
+            "tnr": 0.6507936507936508
+        },
+        "ee": {
+            "_gamma": 0.29,
+            "contamination": 0.359,
+            "n_neighbors": 290,
+            "affinity": [
+                "rbf",
+                "nearest_neighbors"
+            ],
+            "tpr": 0.9333333333333333,
+            "tnr": 0.8809523809523809
+        },
+        "svm": {
+            "_gamma": 0.4,
+            "contamination": 0.359,
+            "n_neighbors": 290,
+            "affinity": "rbf",
+            "tpr": 0.8311111111111111,
+            "tnr": 0.6904761904761905
+        }
     }
 }
