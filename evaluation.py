@@ -58,7 +58,7 @@ def run(dataset, alg, alg_params, verbose, seed):
         inner_seed = seed
     if(alg == 'ic'):
         alg_instance = InfoOutlierDetector(gamma=alg_params['_gamma'],
-            affinity=alg_params['affinity'], n_neighbors=alg_params['n_neighbors'])
+            affinity=alg_params['affinity'], n_neighbors=alg_params['n_neighbors'], delta=alg_params['_delta'])
     elif(alg == 'lof'):
         alg_instance = LocalOutlierFactor(n_neighbors=alg_params['n_neighbors'], 
             contamination=alg_params['contamination'])
