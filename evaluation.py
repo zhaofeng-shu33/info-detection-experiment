@@ -10,7 +10,7 @@ from sacred import Experiment
 from sacred.observers import MongoObserver
 
 from util import TPR_TNR
-from util import Lymphography, Glass
+from util import Lymphography, Glass, Ionosphere
 from util import generate_one_blob, generate_two_moon
 from util import load_parameters, write_parameters
 
@@ -48,6 +48,8 @@ def run(dataset, alg, alg_params, verbose, seed):
         data, labels = generate_one_blob()
     elif(dataset == 'Moon'):
         data, labels = generate_two_moon()
+    elif dataset == 'Ionosphere':
+        data, labels = Ionosphere()
     else:
         raise NameError(dataset + ' dataset name not foud')
 
@@ -74,8 +76,8 @@ def run(dataset, alg, alg_params, verbose, seed):
     tpr, tnr = TPR_TNR(labels, y_predict)
     parameter_json = load_parameters()
     dataset_alg_dic = parameter_json[dataset][alg]
-    should_update_parameter_case_1 = (dataset_alg_dic['tpr'] < tpr)
-    should_update_parameter_case_2 = (dataset_alg_dic['tpr'] > 0.9) and (tpr > 0.9) and (dataset_alg_dic['tnr'] < tnr)
+    should_update_parameter_case_1 = (dataset_alg_dic.get('tpr', 0) < tpr)
+    should_update_parameter_case_2 = (dataset_alg_dic.get('tpr', 0) > 0.9) and (tpr > 0.9) and (dataset_alg_dic.get('tnr', 0) < tnr)
     if should_update_parameter_case_1 or should_update_parameter_case_2:
         dataset_alg_dic['tpr'] = tpr
         dataset_alg_dic['tnr'] = tnr
