@@ -52,7 +52,10 @@ def run(dataset, alg, alg_params, verbose, seed):
         data, labels = Ionosphere()
     else:
         raise NameError(dataset + ' dataset name not foud')
-
+    if alg_params.get('seed'):
+        inner_seed = alg_params.get('seed')
+    else:
+        inner_seed = seed
     if(alg == 'ic'):
         alg_instance = InfoOutlierDetector(gamma=alg_params['_gamma'],
             affinity=alg_params['affinity'], n_neighbors=alg_params['n_neighbors'])
@@ -61,9 +64,9 @@ def run(dataset, alg, alg_params, verbose, seed):
             contamination=alg_params['contamination'])
     elif(alg == 'if'):
         alg_instance = IsolationForest(contamination=alg_params['contamination'], 
-            behaviour='new', random_state=seed)
+            behaviour='new', random_state=inner_seed)
     elif(alg == 'ee'):
-        alg_instance = EllipticEnvelope(contamination=alg_params['contamination'], random_state=seed)
+        alg_instance = EllipticEnvelope(contamination=alg_params['contamination'], random_state=inner_seed)
     elif(alg == 'svm'):
         alg_instance = OneClassSVM(kernel=alg_params['affinity'], 
             gamma=alg_params['_gamma'], nu=alg_params['contamination'])
@@ -76,7 +79,7 @@ def run(dataset, alg, alg_params, verbose, seed):
     tpr, tnr = TPR_TNR(labels, y_predict)
     parameter_json = load_parameters()
     dataset_alg_dic = parameter_json[dataset][alg]
-    should_update_parameter_case_1 = (dataset_alg_dic.get('tpr', 0) < 0.9) and (dataset_alg_dic.get('tnr', 0) < tpr)
+    should_update_parameter_case_1 = (dataset_alg_dic.get('tpr', 0) < 0.9) and (dataset_alg_dic.get('tpr', 0) < tpr)
     should_update_parameter_case_2 = (dataset_alg_dic.get('tpr', 0) > 0.9) and (tpr > 0.9) and (dataset_alg_dic.get('tnr', 0) < tnr)
     if should_update_parameter_case_1 or should_update_parameter_case_2:
         if alg == 'if' or alg == 'ee':

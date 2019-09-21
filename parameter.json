@@ -17,12 +17,13 @@
             "tnr": 1.0
         },
         "if": {
-            "_gamma": 0.1,
+            "_gamma": 0.4,
             "contamination": 0.15,
-            "n_neighbors": 10,
+            "n_neighbors": 290,
             "affinity": "rbf",
             "tpr": 1.0,
-            "tnr": 1.0
+            "tnr": 1.0,
+            "seed": 531659205
         },
         "ee": {
             "_gamma": 0.1,
@@ -64,10 +65,11 @@
         "if": {
             "_gamma": 0.1,
             "contamination": 0.13,
-            "n_neighbors": 10,
+            "n_neighbors": 290,
             "affinity": "rbf",
-            "tpr": 0.9666666666666667,
-            "tnr": 0.7777777777777778
+            "tpr": 0.97,
+            "tnr": 0.8,
+            "seed": 123459513
         },
         "ee": {
             "_gamma": 0.1,
@@ -106,18 +108,19 @@
         "if": {
             "_gamma": 0.1,
             "contamination": 0.041,
-            "n_neighbors": 10,
+            "n_neighbors": 290,
             "affinity": "rbf",
             "tpr": 0.9929577464788732,
-            "tnr": 1.0
+            "tnr": 1.0,
+            "seed": 406626811
         },
         "ee": {
             "_gamma": 0.1,
             "contamination": 0.1,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.9366197183098591,
-            "tnr": 1.0
+            "tpr": 0.9295774647887324,
+            "tnr": 0.8333333333333334
         },
         "svm": {
             "_gamma": 0.1,
@@ -150,8 +153,8 @@
             "contamination": 0.1,
             "n_neighbors": 10,
             "affinity": "rbf",
-            "tpr": 0.9024390243902439,
-            "tnr": 0.2222222222222222
+            "tpr": 0.8975609756097561,
+            "tnr": 0.1111111111111111
         },
         "ee": {
             "_gamma": 0.1,
