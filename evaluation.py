@@ -79,10 +79,12 @@ def run(dataset, alg, alg_params, verbose, seed):
     should_update_parameter_case_1 = (dataset_alg_dic.get('tpr', 0) < 0.9) and (dataset_alg_dic.get('tnr', 0) < tpr)
     should_update_parameter_case_2 = (dataset_alg_dic.get('tpr', 0) > 0.9) and (tpr > 0.9) and (dataset_alg_dic.get('tnr', 0) < tnr)
     if should_update_parameter_case_1 or should_update_parameter_case_2:
+        if alg == 'if' or alg == 'ee':
+            dataset_alg_dic['seed'] = seed
         dataset_alg_dic['tpr'] = tpr
         dataset_alg_dic['tnr'] = tnr
         dataset_alg_dic.update(alg_params)
         write_parameters(parameter_json)
-    ex.log_scalar("tpr", tpr)        
-    ex.log_scalar("tnr", tnr)    
+    ex.log_scalar("tpr", tpr)
+    ex.log_scalar("tnr", tnr)
     return (tpr, tnr)    
