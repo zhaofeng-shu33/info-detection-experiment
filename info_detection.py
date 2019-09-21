@@ -54,8 +54,14 @@ class InfoOutlierDetector(InfoCluster):
             self.data2 = self.X[f1,:].copy()
             f1 = [i for i in self.partition_list[-3][0]]
             self.data = self.X[f1,:]
-
-        threshold = self.critical_values[-1]
+            point_list_inner_1 = self.data.reshape((self.data.shape[0], 1, self.data.shape[1]))
+            norm_result = np.linalg.norm(self.data-point_list_inner_1, axis=2)**2
+            norm_result.sort(axis=1)
+            k = self.n_neighbors
+            norm_result = norm_result[:,0:k]
+            threshold = np.min(np.sum(np.exp(-1.0 * norm_result*self._gamma), axis=1))
+        else:
+            threshold = self.critical_values[-1]
         point_list_inner = point_list.reshape((point_list.shape[0], 1, point_list.shape[1]))        
         if(self.affinity == 'rbf'):
             norm_result = np.linalg.norm(self.data-point_list_inner, axis=2)**2
@@ -71,11 +77,18 @@ class InfoOutlierDetector(InfoCluster):
         zero_one_format = np.sum(np.exp(-1.0 * norm_result*self._gamma), axis=1) >= threshold;
 
         if special:
+            point_list_inner_2 = self.data2.reshape((self.data2.shape[0], 1, self.data2.shape[1]))
+            norm_result = np.linalg.norm(self.data2-point_list_inner_2, axis=2)**2
+            norm_result.sort(axis=1)
+            k = self.n_neighbors
+            norm_result = norm_result[:,0:k]
+            threshold_2 = np.min(np.sum(np.exp(-1.0 * norm_result*self._gamma), axis=1))
+
             norm_result = np.linalg.norm(self.data2-point_list_inner, axis=2)**2
             norm_result.sort(axis=1)
             k = self.n_neighbors
             norm_result = norm_result[:,0:k]
-            threshold_2 = self.critical_values[-2]
+            
             zero_one_format_2 = np.sum(np.exp(-1.0 * norm_result*self._gamma), axis=1) >= threshold_2
             zero_one_format = np.logical_or(zero_one_format, zero_one_format_2)
         return (zero_one_format.astype(int) * 2 - 1)
