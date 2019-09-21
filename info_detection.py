@@ -20,6 +20,7 @@ class InfoOutlierDetector(InfoCluster):
             predict_cat = len(self.partition_list[-3])
         else:
             partition_list = self.partition_list[-2]
+        filter_array = []
         for i in partition_list:
             if len(i) > 1:
                 for j in i:
@@ -27,7 +28,9 @@ class InfoOutlierDetector(InfoCluster):
                 break
         filter_array = np.array(filter_array)
         self.data = X[filter_array, :]
-        self.labels = (filter_array.astype(int) * 2 - 1)
+        filter_array_np = np.zeros(X_len, dtype=int)
+        filter_array_np[filter_array] = 1
+        self.labels = (filter_array_np * 2 - 1)
         self.num_of_outliers = X.shape[0] - self.data.shape[0]
     def fit_predict(self, X):
         self.fit(X)
