@@ -44,9 +44,45 @@ def plot_common_routine(combination, suffix):
         os.mkdir('build')    
     plt.savefig('build/outlier_boundary_illustration.' + suffix) 
 
+def plot_alg_time(axis, filename, plot_name, omit_list = ['pdt_r']):
+    '''combine different algorithms
+    '''
+    linestyle_list = ['-','-', '-', '--']
+    marker_list = ['o', 'v', 's', '*', '+', 'x', 'D', '1']
+    olor_list = ['#3FF711', 'r', 'g', 'm','y','k','c','#00FF00']
+    method_translate = {'pdt_r': 'Kolmogorov', 'dt': 'Narayanan', 'psp_i': 'ours(psp_i)', 'pdt': 'ours(pdt)'}
+    f = open(os.path.join('build', filename), 'r')
+    data = json.loads(f.read())
+    x_data = [int(i) for i in data.keys()]
+    one_key = str(x_data[0])
+    alg_data = {}
+    for i in data[one_key].keys():
+        alg_data[i] = []
+    for i in data.values():
+        for k,v in i.items():
+            alg_data[k].append(v)
+    index = 0
+    for k,v in alg_data.items():
+        if(k == 'num_edge' or omit_list.count(k) > 0):
+            continue
+        axis.plot(x_data, v, label=method_translate[k], linewidth=3, color=color_list[index],
+            marker=marker_list[index], markersize=12, linestyle=linestyle_list[index])
+        index += 1
+    axis.ylabel('Time(s)', fontsize=18)
+    axis.xlabel('N(nodes)', fontsize=18)
+    if plot_name == 'gaussian':
+        plot_title = 'Gaussian blob dataset'
+    else:
+        plot_title = 'Two level graph dataset'
+    axis.yscale('log')
+    axis.title(plot_title, fontsize=18)
+    axis.legend(fontsize='x-large')
+
+
 def plot_barchart_for_dataset(axis):
     parameter_json = load_parameters()
     dataset_list = ['GaussianBlob', 'Moon', 'Lymphography']
+    method_translate = {'ic' : 'ours', 'if' : 'if', 'svm' : 'svm', 'ee' : 'ee', 'lof' : 'lof'}
     alg_dic = {}
     for i in parameter_json['GaussianBlob'].keys():
         alg_dic[i] = []
@@ -58,12 +94,12 @@ def plot_barchart_for_dataset(axis):
     num_of_algs = len(alg_dic.keys())
     offset = 0
     for k, v in alg_dic.items():
-        axis.bar(x - width/2 + offset * width/num_of_algs, v, width/num_of_algs, label = k)
+        axis.bar(x - width/2 + offset * width/num_of_algs, v, width/num_of_algs, label = method_translate[k])
         offset += 1
     axis.set_xticks(x)
     axis.set_xticklabels(dataset_list)
     axis.set_ylabel('TNF')
-    axis.legend()
+    axis.legend(loc='upper center', bbox_to_anchor=(0.65, 1))
 
 def plot_experimental_results():
     fig, ax = plt.subplots()
