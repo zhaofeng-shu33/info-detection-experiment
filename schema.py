@@ -17,6 +17,24 @@ from evaluation import ex
 
 BUILD_DIR = 'build'
 PARAMETER_FILE = 'parameter.json'
+
+def load_parameters():
+    parameter_file_path = os.path.join(BUILD_DIR, PARAMETER_FILE)
+    if (os.path.exists(parameter_file_path)):
+        json_str = open(parameter_file_path).read()
+    else:
+        json_str = None            
+        with open(parameter_file_path, 'w') as f:
+            json_str_new = update_json(json_str)
+            f.write(json_str_new)
+        print('parameter files written to %s' % PARAMETER_FILE)
+    return json.loads(json_str)
+
+def write_parameters(parameter_json):
+    parameter_file_path = os.path.join(BUILD_DIR, PARAMETER_FILE)
+    with open(parameter_file_path, 'w') as f:
+        f.write(json.dumps(parameter_json, indent=4))
+
 TABLE_NAME = 'id_compare'
 DATASET = ['GaussianBlob', 'Moon', 'Lymphography', 'Glass']
 METHOD = ['ic', 'lof', 'if', 'ee', 'svm']
@@ -87,22 +105,13 @@ if __name__ == '__main__':
     parser.add_argument('--table_format', default='latex_raw', choices=['html', 'latex_raw'])    
     args = parser.parse_args()
     if(args.action == 'json'):
-        if (os.path.exists(PARAMETER_FILE)):
-            json_str = open(PARAMETER_FILE).read()
-        else:
-            json_str = None            
-        with open(PARAMETER_FILE, 'w') as f:
-            json_str_new = update_json(json_str)
-            f.write(json_str_new)
-        print('parameter files written to %s' % PARAMETER_FILE)
+        json_str = load_parameters()
     elif(args.action == 'table'):
         if not (os.path.exists(PARAMETER_FILE)):
             print("parameter file %s not exists. Please generate it first."% PARAMETER_FILE)
         else:
-            with open(PARAMETER_FILE) as f:
-                parameter_json = json.loads(f.read())        
+            parameter_json = load_parameters()
             if not(args.ignore_computing):
                 run_experiment_matrix(parameter_json)
-                with open(PARAMETER_FILE, 'w') as f:
-                    f.write(json.dumps(parameter_json, indent=4))
+                write_parameters(parameter_json)
             make_table(parameter_json, TABLE_NAME, args.table_format)
