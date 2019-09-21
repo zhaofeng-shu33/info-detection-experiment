@@ -1,3 +1,5 @@
+import json
+import os
 import numpy as np
 from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import scale
@@ -5,6 +7,26 @@ from sklearn.datasets import make_blobs, make_moons
 
 from uci_glass_outlier import fetch_uci_glass_outlier
 from lymphography_outlier import fetch_or_load_lymphography
+
+BUILD_DIR = 'build'
+PARAMETER_FILE = 'parameter.json'
+
+def load_parameters():
+    parameter_file_path = os.path.join(BUILD_DIR, PARAMETER_FILE)
+    if (os.path.exists(parameter_file_path)):
+        json_str = open(parameter_file_path).read()
+    else:
+        json_str = None            
+        with open(parameter_file_path, 'w') as f:
+            json_str_new = update_json(json_str)
+            f.write(json_str_new)
+        print('parameter files written to %s' % PARAMETER_FILE)
+    return json.loads(json_str)
+
+def write_parameters(parameter_json):
+    parameter_file_path = os.path.join(BUILD_DIR, PARAMETER_FILE)
+    with open(parameter_file_path, 'w') as f:
+        f.write(json.dumps(parameter_json, indent=4))
 
 def TPR_TNR(y_true, y_pred):
     cm = confusion_matrix(y_true, y_pred) # [[tn, fp],[fn, tp]]

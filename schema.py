@@ -15,25 +15,8 @@ from tabulate import tabulate
 
 from evaluation import ex
 
-BUILD_DIR = 'build'
-PARAMETER_FILE = 'parameter.json'
+from util import BUILD_DIR, load_parameters, write_parameters
 
-def load_parameters():
-    parameter_file_path = os.path.join(BUILD_DIR, PARAMETER_FILE)
-    if (os.path.exists(parameter_file_path)):
-        json_str = open(parameter_file_path).read()
-    else:
-        json_str = None            
-        with open(parameter_file_path, 'w') as f:
-            json_str_new = update_json(json_str)
-            f.write(json_str_new)
-        print('parameter files written to %s' % PARAMETER_FILE)
-    return json.loads(json_str)
-
-def write_parameters(parameter_json):
-    parameter_file_path = os.path.join(BUILD_DIR, PARAMETER_FILE)
-    with open(parameter_file_path, 'w') as f:
-        f.write(json.dumps(parameter_json, indent=4))
 
 TABLE_NAME = 'id_compare'
 DATASET = ['GaussianBlob', 'Moon', 'Lymphography', 'Glass']
@@ -107,11 +90,8 @@ if __name__ == '__main__':
     if(args.action == 'json'):
         json_str = load_parameters()
     elif(args.action == 'table'):
-        if not (os.path.exists(PARAMETER_FILE)):
-            print("parameter file %s not exists. Please generate it first."% PARAMETER_FILE)
-        else:
-            parameter_json = load_parameters()
-            if not(args.ignore_computing):
-                run_experiment_matrix(parameter_json)
-                write_parameters(parameter_json)
-            make_table(parameter_json, TABLE_NAME, args.table_format)
+        parameter_json = load_parameters()
+        if not(args.ignore_computing):
+            run_experiment_matrix(parameter_json)
+            write_parameters(parameter_json)
+        make_table(parameter_json, TABLE_NAME, args.table_format)

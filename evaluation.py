@@ -12,6 +12,8 @@ from sacred.observers import MongoObserver
 from util import TPR_TNR
 from util import Lymphography, Glass
 from util import generate_one_blob, generate_two_moon
+from util import load_parameters, write_parameters
+
 
 from info_detection import InfoOutlierDetector
 
@@ -70,6 +72,13 @@ def run(dataset, alg, alg_params, verbose, seed):
     if(alg == 'ic' and verbose):
         print(alg_instance.partition_num_list)
     tpr, tnr = TPR_TNR(labels, y_predict)
+    parameter_json = load_parameters()
+    dataset_alg_dic = parameter_json[dataset][alg]
+    if (dataset_alg_dic['tpr'] > 0.9 or dataset_alg_dic['tpr'] < tpr) and dataset_alg_dic['tnr'] < tnr:
+        dataset_alg_dic['tpr'] = tpr
+        dataset_alg_dic['tnr'] = tnr
+        dataset_alg_dic.update(alg_params)
+        write_parameters(parameter_json)
     ex.log_scalar("tpr", tpr)        
     ex.log_scalar("tnr", tnr)    
     return (tpr, tnr)    
