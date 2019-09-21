@@ -47,7 +47,7 @@ class InfoOutlierDetector(InfoCluster):
         -------
         prediction_list: array-like shape (n_samples,), dtype=bool
         '''
-        threshold = self.critical_values[-1]
+        threshold = self.critical_values[-self.num_of_class]
         point_list_inner = point_list.reshape((point_list.shape[0], 1, point_list.shape[1]))        
         if(self.affinity == 'rbf'):
             norm_result = np.linalg.norm(self.data-point_list_inner, axis=2)**2
