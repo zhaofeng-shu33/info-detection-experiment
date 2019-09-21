@@ -16,16 +16,15 @@ class InfoOutlierDetector(InfoCluster):
     def fit(self, X):
         super().fit(X)
         X_len = X.shape[0]
-        if False and X_len <= 2 * len(self.partition_list[-2]) and len(self.partition_list) >= 3:
-            predict_cat = len(self.partition_list[-3])
-        else:
-            partition_list = self.partition_list[-2]
+        num_class_plus_one = 2
+        while X_len <= num_class_plus_one * len(self.partition_list[-num_class_plus_one]) and len(self.partition_list) > num_class_plus_one:
+            num_class_plus_one += 1
+        partition_list = self.partition_list[-num_class_plus_one]
         filter_array = []
         for i in partition_list:
             if len(i) > 1:
                 for j in i:
                     filter_array.append(j)
-                break
         filter_array = np.array(filter_array)
         self.data = X[filter_array, :]
         filter_array_np = np.zeros(X_len, dtype=int)
