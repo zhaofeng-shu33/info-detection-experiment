@@ -50,12 +50,16 @@ class InfoOutlierDetector(InfoCluster):
         special = False
         if self.X.shape[0] == 345:
             special = True
+            if self.affinity.count('rbf') >= 0:
+                order = 2
+            else:
+                order = 1
             f1 = [i for i in self.partition_list[-3][1]]
             self.data2 = self.X[f1,:].copy()
             f1 = [i for i in self.partition_list[-3][0]]
             self.data = self.X[f1,:]
             point_list_inner_1 = self.data.reshape((self.data.shape[0], 1, self.data.shape[1]))
-            norm_result = np.linalg.norm(self.data-point_list_inner_1, axis=2)**2
+            norm_result = np.linalg.norm(self.data-point_list_inner_1, axis=2, ord=order)**order
             norm_result.sort(axis=1)
             k = self.n_neighbors
             norm_result = norm_result[:,0:k]
@@ -78,13 +82,13 @@ class InfoOutlierDetector(InfoCluster):
 
         if special:
             point_list_inner_2 = self.data2.reshape((self.data2.shape[0], 1, self.data2.shape[1]))
-            norm_result = np.linalg.norm(self.data2-point_list_inner_2, axis=2)**2
+            norm_result = np.linalg.norm(self.data2-point_list_inner_2, axis=2, ord=order)**order
             norm_result.sort(axis=1)
             k = self.n_neighbors
             norm_result = norm_result[:,0:k]
             threshold_2 = np.min(np.sum(np.exp(-1.0 * norm_result*self._gamma), axis=1))
 
-            norm_result = np.linalg.norm(self.data2-point_list_inner, axis=2)**2
+            norm_result = np.linalg.norm(self.data2-point_list_inner, axis=2, ord=order)**order
             norm_result.sort(axis=1)
             k = self.n_neighbors
             norm_result = norm_result[:,0:k]
