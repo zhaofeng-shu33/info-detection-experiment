@@ -25,6 +25,7 @@ class InfoOutlierDetector(InfoCluster):
             if len(i) > 1:
                 for j in i:
                     filter_array.append(j)
+        self.num_of_class = num_class_plus_one - 1
         filter_array = np.array(filter_array)
         self.data = X[filter_array, :]
         filter_array_np = np.zeros(X_len, dtype=int)
