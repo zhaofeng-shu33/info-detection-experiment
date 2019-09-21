@@ -41,7 +41,10 @@ def update_json(json_str=None):
     return json.dumps(dic, indent=4)                
 
 def run_experiment_matrix(parameter_dic):
+    global DATASET
     for dataset, v in parameter_dic.items():
+        if DATASET.count(dataset) == 0:
+            continue
         for alg, v1 in v.items():
             ex_param_dic = {
                 'alg_params': v1,
@@ -61,7 +64,9 @@ def run_experiment_matrix(parameter_dic):
 def make_table(dic, tb_name, format):
     global METHOD, METHOD_FULL_NAME, DATASET, BUILD_DIR
     table = [[METHOD_FULL_NAME[i]] for i in METHOD]
-    for dataset_method in dic.values():
+    for dataset_name, dataset_method in dic.items():
+        if DATASET.count(dataset_name) == 0:
+            continue
         for index, v in enumerate(dataset_method.values()):
             tpr, tnr = v['tpr'], v['tnr']
             table[index].append('%.1f\\%%/%.1f\\%%'%(100*tpr, 100*tnr))
@@ -82,11 +87,16 @@ def make_table(dic, tb_name, format):
         f.write(table_string)
         
 if __name__ == '__main__':
+    dataset_choices = [i for i in DATASET]
+    dataset_choices.append('all')
     parser = argparse.ArgumentParser()
     parser.add_argument('--action', default='table', choices=['json', 'table'])
     parser.add_argument('--ignore_computing', help='whether to ignore computing and use ari field in parameter file directly', default=False, type=bool, nargs='?', const=True)
+    parser.add_argument('--dataset', help='name of the dataset to fine tuning', default='all', choices=dataset_choices, nargs='+')
     parser.add_argument('--table_format', default='latex_raw', choices=['html', 'latex_raw'])    
     args = parser.parse_args()
+    if type(args.dataset) is list:
+        DATASET = args.dataset
     if(args.action == 'json'):
         json_str = load_parameters()
     elif(args.action == 'table'):
