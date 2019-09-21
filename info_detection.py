@@ -27,7 +27,7 @@ class InfoOutlierDetector(InfoCluster):
         filter_array = (labels == label_num)        
         self.data = X[filter_array, :]
         self.labels = (filter_array.astype(int) * 2 - 1)
-
+        self.num_of_outliers = X.shape[0] - self.data.shape[0]
     def fit_predict(self, X):
         self.fit(X)
         return self.labels

@@ -70,7 +70,7 @@ def run(dataset, alg, alg_params, verbose, seed):
         
     y_predict = alg_instance.fit_predict(data)
     if(alg == 'ic' and verbose):
-        print(alg_instance.partition_num_list)
+        print('num of outliers', alg_instance.num_of_outliers)
     tpr, tnr = TPR_TNR(labels, y_predict)
     parameter_json = load_parameters()
     dataset_alg_dic = parameter_json[dataset][alg]
