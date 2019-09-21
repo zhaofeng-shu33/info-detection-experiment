@@ -169,5 +169,37 @@
             "tpr": 0.9170731707317074,
             "tnr": 0.2222222222222222
         }
+    },
+    "Ionosphere": {
+        "ic": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf"
+        },
+        "lof": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf"
+        },
+        "if": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf"
+        },
+        "ee": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf"
+        },
+        "svm": {
+            "_gamma": 0.1,
+            "contamination": 0.1,
+            "n_neighbors": 10,
+            "affinity": "rbf"
+        }
     }
 }

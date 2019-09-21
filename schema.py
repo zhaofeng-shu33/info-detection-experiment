@@ -19,18 +19,14 @@ from util import BUILD_DIR, load_parameters, write_parameters
 
 
 TABLE_NAME = 'id_compare'
-DATASET = ['GaussianBlob', 'Moon', 'Lymphography', 'Glass']
+DATASET = ['GaussianBlob', 'Moon', 'Lymphography', 'Glass', 'Ionosphere']
 METHOD = ['ic', 'lof', 'if', 'ee', 'svm']
 METHOD_FULL_NAME = {'ic': 'Info-Detection', 'lof': 'local outlier factor', 
     'if': 'isolation forest', 'ee': 'elliptic envelope', 'svm': 'one class SVM'}
 ALG_PARAMS = {'_gamma': 0.1, 'contamination': 0.1, 'n_neighbors': 10, 'affinity': 'rbf'}
 
-def update_json(json_str=None):
+def update_json(dic):
     global DATASET, ALG_PARAMS, METHOD
-    if(json_str):
-        dic = json.loads(json_str)
-    else:
-        dic = {}
     for dataset in DATASET:
         if not(dic.get(dataset)):
             dic[dataset] = {}
@@ -38,7 +34,7 @@ def update_json(json_str=None):
         for method in METHOD:
             if not(dic_dataset.get(method)):
                 dic_dataset[method] = ALG_PARAMS            
-    return json.dumps(dic, indent=4)                
+             
 
 def run_experiment_matrix(parameter_dic):
     global DATASET
@@ -98,7 +94,9 @@ if __name__ == '__main__':
     if type(args.dataset) is list:
         DATASET = args.dataset
     if(args.action == 'json'):
-        json_str = load_parameters()
+        json_obj = load_parameters()
+        update_json(json_obj)
+        write_parameters(json_obj)
     elif(args.action == 'table'):
         parameter_json = load_parameters()
         if not(args.ignore_computing):
