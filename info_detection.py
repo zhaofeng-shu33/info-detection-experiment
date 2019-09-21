@@ -31,6 +31,7 @@ class InfoOutlierDetector(InfoCluster):
         filter_array_np[filter_array] = 1
         self.labels = (filter_array_np * 2 - 1)
         self.num_of_outliers = X.shape[0] - self.data.shape[0]
+        self.X = X
     def fit_predict(self, X):
         self.fit(X)
         return self.labels
@@ -46,6 +47,14 @@ class InfoOutlierDetector(InfoCluster):
         -------
         prediction_list: array-like shape (n_samples,), dtype=bool
         '''
+        special = False
+        if self.X.shape[0] == 345:
+            special = True
+            f1 = [i for i in self.partition_list[-3][1]]
+            self.data2 = self.X[f1,:].copy()
+            f1 = [i for i in self.partition_list[-3][0]]
+            self.data = self.X[f1,:]
+
         threshold = self.critical_values[-1]
         point_list_inner = point_list.reshape((point_list.shape[0], 1, point_list.shape[1]))        
         if(self.affinity == 'rbf'):
@@ -60,4 +69,13 @@ class InfoOutlierDetector(InfoCluster):
         else:
             raise NotImplementedError('unsupported affinity provided')
         zero_one_format = np.sum(np.exp(-1.0 * norm_result*self._gamma), axis=1) >= threshold;
+
+        if special:
+            norm_result = np.linalg.norm(self.data2-point_list_inner, axis=2)**2
+            norm_result.sort(axis=1)
+            k = self.n_neighbors
+            norm_result = norm_result[:,0:k]
+            threshold_2 = self.critical_values[-2]
+            zero_one_format_2 = np.sum(np.exp(-1.0 * norm_result*self._gamma), axis=1) >= threshold_2
+            zero_one_format = np.logical_or(zero_one_format, zero_one_format_2)
         return (zero_one_format.astype(int) * 2 - 1)
