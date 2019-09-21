@@ -74,7 +74,10 @@ def run(dataset, alg, alg_params, verbose, seed):
     tpr, tnr = TPR_TNR(labels, y_predict)
     parameter_json = load_parameters()
     dataset_alg_dic = parameter_json[dataset][alg]
-    if (dataset_alg_dic['tpr'] > 0.9 or dataset_alg_dic['tpr'] < tpr) and dataset_alg_dic['tnr'] < tnr:
+    should_update_parameter_case_1 = (dataset_alg_dic['tpr'] < tpr) and (dataset_alg_dic['tnr'] < tnr)
+    should_update_parameter_case_2 = (dataset_alg_dic['tpr'] > 0.9) and (dataset_alg_dic['tnr'] < tnr)
+    should_update_parameter_case_3 = (dataset_alg_dic['tpr'] < 0.9) and (dataset_alg_dic['tpr'] < tpr)
+    if should_update_parameter_case_1 or should_update_parameter_case_2 or should_update_parameter_case_3:
         dataset_alg_dic['tpr'] = tpr
         dataset_alg_dic['tnr'] = tnr
         dataset_alg_dic.update(alg_params)

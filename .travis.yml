@@ -6,6 +6,6 @@ install:
   - pip install -r requirements.txt
 script:
   - python demo.py --figure_suffix svg
-  - mkdir build
+  - mkdir -p build
   - cp parameter.json build/
   - python schema.py --table_format html
