@@ -13,7 +13,7 @@ def get_moon_configuration():
     train_data, _ = generate_two_moon()
 
     alg = EllipticEnvelope(contamination=0.15)
-    ic = InfoOutlierDetector(gamma=0.41, n_neighbors=20, affinity=['rbf', 'nearest_neighbors'])
+    ic = InfoOutlierDetector(gamma=0.2, n_neighbors=20, affinity=['laplacian', 'nearest_neighbors'])
     return [('Info-Detection on Moon', ic, train_data), ('Elliptic Envelope on Moon', alg, train_data)]
 
 def get_blob_configuration():

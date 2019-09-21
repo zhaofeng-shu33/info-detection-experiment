@@ -71,8 +71,8 @@ class InfoOutlierDetector(InfoCluster):
             norm_result = np.linalg.norm(self.data-point_list_inner, axis=2)**2
         elif(self.affinity == 'laplacian'):
             norm_result = np.linalg.norm(self.data-point_list_inner, axis=2, ord=1)
-        elif isinstance(self.affinity, list) and self.affinity.count('neareast_neighbors') >= 0 and self.affinity.count('rbf') >= 0:
-            norm_result = np.linalg.norm(self.data-point_list_inner, axis=2)**2
+        elif isinstance(self.affinity, list) and self.affinity.count('neareast_neighbors') >= 0:
+            norm_result = np.linalg.norm(self.data-point_list_inner, axis=2, ord=order)**order
             norm_result.sort(axis=1)
             k = self.n_neighbors
             norm_result = norm_result[:,0:k]
