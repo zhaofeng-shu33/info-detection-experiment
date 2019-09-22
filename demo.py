@@ -75,9 +75,9 @@ def plot_alg_time(axis, filename, omit_list = ['pdt'], show_labels=True):
         axis.set_xlabel('N(Nodes)')    
         axis.xaxis.set_label_coords(-0.14, -0.035)
     if filename.find('gaussian') >= 0:
-        plot_title = 'Gaussian blob dataset'
+        plot_title = '(a) GaussianBlobs'
     else:
-        plot_title = 'Two level graph dataset'
+        plot_title = '(b) Two-level graph'
     axis.set_yscale('log')
     axis.set_title(plot_title)
     axis.legend().set_zorder(1)
@@ -103,7 +103,7 @@ def plot_barchart_for_dataset(axis):
     axis.set_xticks(x)
     axis.set_xticklabels(dataset_list)
     axis.set_ylabel('TNF', fontsize=16)
-    axis.set_title('Method comparison')
+    axis.set_title('(c) Method comparison')
     axis.legend(loc='upper center', bbox_to_anchor=(0.68, 1)).set_zorder(0)
 
 def plot_experimental_results(suffix):
