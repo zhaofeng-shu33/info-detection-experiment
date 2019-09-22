@@ -50,7 +50,7 @@ def plot_alg_time(axis, filename, omit_list = ['pdt_r']):
     '''
     linestyle_list = ['-','-', '-', '--']
     marker_list = ['o', 'v', 's', '*', '+', 'x', 'D', '1']
-    color_list = ['#3FF711', 'r', 'g', 'm','y','k','c','#00FF00']
+    color_list = ['b', 'r', 'g', 'm','y','k','c','#00FF00']
     method_translate = {'pdt_r': 'Kolmogorov', 'dt': 'Narayanan', 'psp_i': 'ours(psp_i)', 'pdt': 'ours(pdt)'}
     f = open(os.path.join('build', filename), 'r')
     data = json.loads(f.read())
@@ -69,15 +69,16 @@ def plot_alg_time(axis, filename, omit_list = ['pdt_r']):
         axis.plot(x_data, v, label=method_translate[k], linewidth=3, color=color_list[index],
             marker=marker_list[index], markersize=12, linestyle=linestyle_list[index])
         index += 1
-    axis.set_ylabel('Time(s)', fontsize=18)
-    axis.set_xlabel('N(nodes)', fontsize=18)
+    axis.set_ylabel('Time(s)')
+    axis.set_xlabel('N(nodes)')    
+    axis.xaxis.set_label_coords(1.06, -0.025)
     if filename.find('gaussian') >= 0:
         plot_title = 'Gaussian blob dataset'
     else:
         plot_title = 'Two level graph dataset'
     axis.set_yscale('log')
-    axis.set_title(plot_title, fontsize=18)
-    axis.legend(fontsize='x-large')
+    axis.set_title(plot_title)
+    axis.legend()
 
 
 def plot_barchart_for_dataset(axis):
@@ -100,11 +101,18 @@ def plot_barchart_for_dataset(axis):
     axis.set_xticks(x)
     axis.set_xticklabels(dataset_list)
     axis.set_ylabel('TNF')
+    axis.set_title('Method comparison')
     axis.legend(loc='upper center', bbox_to_anchor=(0.65, 1))
 
 def plot_experimental_results():
-    fig, ax = plt.subplots()
+    plt.figure(figsize=(18, 5.7))
+    plt.subplots_adjust(wspace=.17)
+    ax = plt.subplot(1, 3, 1)
     plot_alg_time(ax, '2019-08-26-gaussian.json')
+    ax = plt.subplot(1, 3, 2)
+    plot_alg_time(ax, '2019-09-19-two_level.json')
+    ax = plt.subplot(1, 3, 3)
+    plot_barchart_for_dataset(ax)
     plt.show()
 
 if __name__ == '__main__':
