@@ -104,7 +104,7 @@ def plot_barchart_for_dataset(axis):
         offset += 1
     axis.set_xticks(x)
     axis.set_xticklabels(dataset_list)
-    axis.set_ylabel('TNF', fontsize=16)
+    axis.set_ylabel('TNR', fontsize=16)
     axis.set_title('(c) Method comparison')
     axis.legend(loc='upper center', bbox_to_anchor=(0.68, 1)).set_zorder(0)
 
