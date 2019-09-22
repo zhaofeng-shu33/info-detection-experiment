@@ -1,5 +1,6 @@
 import argparse
 import os
+import json
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -44,12 +45,12 @@ def plot_common_routine(combination, suffix):
         os.mkdir('build')    
     plt.savefig('build/outlier_boundary_illustration.' + suffix) 
 
-def plot_alg_time(axis, filename, plot_name, omit_list = ['pdt_r']):
+def plot_alg_time(axis, filename, omit_list = ['pdt_r']):
     '''combine different algorithms
     '''
     linestyle_list = ['-','-', '-', '--']
     marker_list = ['o', 'v', 's', '*', '+', 'x', 'D', '1']
-    olor_list = ['#3FF711', 'r', 'g', 'm','y','k','c','#00FF00']
+    color_list = ['#3FF711', 'r', 'g', 'm','y','k','c','#00FF00']
     method_translate = {'pdt_r': 'Kolmogorov', 'dt': 'Narayanan', 'psp_i': 'ours(psp_i)', 'pdt': 'ours(pdt)'}
     f = open(os.path.join('build', filename), 'r')
     data = json.loads(f.read())
@@ -68,14 +69,14 @@ def plot_alg_time(axis, filename, plot_name, omit_list = ['pdt_r']):
         axis.plot(x_data, v, label=method_translate[k], linewidth=3, color=color_list[index],
             marker=marker_list[index], markersize=12, linestyle=linestyle_list[index])
         index += 1
-    axis.ylabel('Time(s)', fontsize=18)
-    axis.xlabel('N(nodes)', fontsize=18)
-    if plot_name == 'gaussian':
+    axis.set_ylabel('Time(s)', fontsize=18)
+    axis.set_xlabel('N(nodes)', fontsize=18)
+    if filename.find('gaussian') >= 0:
         plot_title = 'Gaussian blob dataset'
     else:
         plot_title = 'Two level graph dataset'
-    axis.yscale('log')
-    axis.title(plot_title, fontsize=18)
+    axis.set_yscale('log')
+    axis.set_title(plot_title, fontsize=18)
     axis.legend(fontsize='x-large')
 
 
@@ -103,7 +104,7 @@ def plot_barchart_for_dataset(axis):
 
 def plot_experimental_results():
     fig, ax = plt.subplots()
-    plot_barchart_for_dataset(ax)
+    plot_alg_time(ax, '2019-08-26-gaussian.json')
     plt.show()
 
 if __name__ == '__main__':
