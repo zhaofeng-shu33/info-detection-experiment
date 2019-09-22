@@ -45,13 +45,13 @@ def plot_common_routine(combination, suffix):
         os.mkdir('build')    
     plt.savefig('build/outlier_boundary_illustration.' + suffix) 
 
-def plot_alg_time(axis, filename, omit_list = ['pdt_r']):
+def plot_alg_time(axis, filename, omit_list = ['pdt'], show_labels=True):
     '''combine different algorithms
     '''
     linestyle_list = ['-','-', '-', '--']
     marker_list = ['o', 'v', 's', '*', '+', 'x', 'D', '1']
     color_list = ['b', 'r', 'g', 'm','y','k','c','#00FF00']
-    method_translate = {'pdt_r': 'Kolmogorov', 'dt': 'Narayanan', 'psp_i': 'ours(psp_i)', 'pdt': 'ours(pdt)'}
+    method_translate = {'pdt_r': 'Kolmogorov', 'dt': 'Narayanan', 'psp_i': 'Ours', 'pdt': 'ours(pdt)'}
     f = open(os.path.join('build', filename), 'r')
     data = json.loads(f.read())
     x_data = [int(i) for i in data.keys()]
@@ -69,16 +69,18 @@ def plot_alg_time(axis, filename, omit_list = ['pdt_r']):
         axis.plot(x_data, v, label=method_translate[k], linewidth=3, color=color_list[index],
             marker=marker_list[index], markersize=12, linestyle=linestyle_list[index])
         index += 1
-    axis.set_ylabel('Time(s)')
-    axis.set_xlabel('N(nodes)')    
-    axis.xaxis.set_label_coords(1.06, -0.025)
+    axis.xaxis.set_ticks(x_data)
+    if show_labels:
+        axis.set_ylabel('Time(s)', fontsize=16)
+        axis.set_xlabel('N(Nodes)')    
+        axis.xaxis.set_label_coords(-0.14, -0.035)
     if filename.find('gaussian') >= 0:
         plot_title = 'Gaussian blob dataset'
     else:
         plot_title = 'Two level graph dataset'
     axis.set_yscale('log')
     axis.set_title(plot_title)
-    axis.legend()
+    axis.legend().set_zorder(1)
 
 
 def plot_barchart_for_dataset(axis):
@@ -100,26 +102,26 @@ def plot_barchart_for_dataset(axis):
         offset += 1
     axis.set_xticks(x)
     axis.set_xticklabels(dataset_list)
-    axis.set_ylabel('TNF')
+    axis.set_ylabel('TNF', fontsize=16)
     axis.set_title('Method comparison')
-    axis.legend(loc='upper center', bbox_to_anchor=(0.65, 1))
+    axis.legend(loc='upper center', bbox_to_anchor=(0.68, 1)).set_zorder(0)
 
-def plot_experimental_results():
-    plt.figure(figsize=(18, 5.7))
-    plt.subplots_adjust(wspace=.17)
-    ax = plt.subplot(1, 3, 1)
-    plot_alg_time(ax, '2019-08-26-gaussian.json')
-    ax = plt.subplot(1, 3, 2)
-    plot_alg_time(ax, '2019-09-19-two_level.json')
-    ax = plt.subplot(1, 3, 3)
-    plot_barchart_for_dataset(ax)
+def plot_experimental_results(suffix):
+    _, (a1, a2, a3) = plt.subplots(1, 3, gridspec_kw={'width_ratios': [3.2,3,4]}, figsize=(10.5, 3))
+    plt.subplots_adjust(wspace=0, right=1, left=0)
+    # speed comparison data file is available at https://github.com/zhaofeng-shu33/pspartition-speed-compare
+    plot_alg_time(a1, '2019-08-26-gaussian.json')
+    plot_alg_time(a2, '2019-09-19-two_level.json', show_labels=False)
+    plot_barchart_for_dataset(a3)
+    plt.tight_layout()
+    plt.savefig('build/experimental_results_triple.' + suffix) 
     plt.show()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', default='boundary_plot', choices=['bounadry_plot', 'experiment_matrix_plot'])
     parser.add_argument('--dataset', default='all', choices=['all', 'blob', 'moon'])
-    parser.add_argument('--figure_suffix', default='eps', choices=['eps', 'pdf', 'svg'])    
+    parser.add_argument('--figure_suffix', default='eps', choices=['eps', 'pdf', 'svg', 'png'])    
     args = parser.parse_args()
     if args.task == 'boundary_plot':
         combination_list = []
@@ -129,4 +131,4 @@ if __name__ == '__main__':
             combination_list.extend(get_moon_configuration())
         plot_common_routine(combination_list, args.figure_suffix)
     else:
-        plot_experimental_results()
+        plot_experimental_results(args.figure_suffix)
