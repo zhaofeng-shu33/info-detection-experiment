@@ -23,11 +23,11 @@ def get_blob_configuration():
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
     return [('Info-Detection on GaussianBlob', ic, train_data)]  
     
-def plot_common_routine(combination, suffix):
+def plot_common_routine(show_pic, combination, suffix):
     xx, yy = np.meshgrid(np.linspace(-7, 7, 150),
                      np.linspace(-7, 7, 150))
     num_of_alg = len(combination)                     
-    plt.figure(figsize=(6 * num_of_alg, 6))
+    plt.figure(figsize=(3 * num_of_alg, 3))
     label_text = ['(a)', '(b)', '(c)']
     for i, combination_tuple in enumerate(combination):
         plt.subplot(1, num_of_alg, i+1)
@@ -38,12 +38,14 @@ def plot_common_routine(combination, suffix):
         plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors='black')
         plt.scatter(train_data[y_pred==1,0], train_data[y_pred==1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
-        plt.xlabel(label_text[i], fontsize=20)
-        plt.title(alg_name, fontsize=20)
+        plt.xlabel(label_text[i])
+        plt.title(alg_name)
     plt.tight_layout()  
     if not(os.path.exists('build')):
         os.mkdir('build')    
-    plt.savefig('build/outlier_boundary_illustration.' + suffix) 
+    plt.savefig('build/outlier_boundary_illustration.' + suffix)
+    if show_pic:
+        plt.show()
 
 def plot_alg_time(axis, filename, omit_list = ['pdt'], show_labels=True):
     '''combine different algorithms
@@ -106,7 +108,7 @@ def plot_barchart_for_dataset(axis):
     axis.set_title('(c) Method comparison')
     axis.legend(loc='upper center', bbox_to_anchor=(0.68, 1)).set_zorder(0)
 
-def plot_experimental_results(suffix):
+def plot_experimental_results(show_pic, suffix):
     _, (a1, a2, a3) = plt.subplots(1, 3, gridspec_kw={'width_ratios': [3.2,3,4]}, figsize=(10.5, 3))
     plt.subplots_adjust(wspace=0, right=1, left=0)
     # speed comparison data file is available at https://github.com/zhaofeng-shu33/pspartition-speed-compare
@@ -114,14 +116,16 @@ def plot_experimental_results(suffix):
     plot_alg_time(a2, '2019-09-19-two_level.json', show_labels=False)
     plot_barchart_for_dataset(a3)
     plt.tight_layout()
-    plt.savefig('build/experimental_results_triple.' + suffix) 
-    plt.show()
+    plt.savefig('build/experimental_results_triple.' + suffix)
+    if show_pic:
+        plt.show()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', default='boundary_plot', choices=['bounadry_plot', 'experiment_matrix_plot'])
     parser.add_argument('--dataset', default='all', choices=['all', 'blob', 'moon'])
     parser.add_argument('--figure_suffix', default='eps', choices=['eps', 'pdf', 'svg', 'png'])    
+    parser.add_argument('--show_pic', default=False, type=bool, nargs='?', const=True)
     args = parser.parse_args()
     if args.task == 'boundary_plot':
         combination_list = []
@@ -129,6 +133,6 @@ if __name__ == '__main__':
             combination_list.extend(get_blob_configuration())
         if(args.dataset == 'all' or args.dataset == 'moon'):
             combination_list.extend(get_moon_configuration())
-        plot_common_routine(combination_list, args.figure_suffix)
+        plot_common_routine(args.show_pic, combination_list, args.figure_suffix)
     else:
-        plot_experimental_results(args.figure_suffix)
+        plot_experimental_results(args.show_pic, args.figure_suffix)
