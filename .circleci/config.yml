@@ -11,5 +11,5 @@ jobs:
             pip install --user -r requirements.txt
             python demo.py --figure_suffix svg
       - store_artifacts:
-            path: /build/outlier_boundary_illustration.svg
+            path: ./build/outlier_boundary_illustration.svg
             destination: outlier_boundary_illustration.svg
