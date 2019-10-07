@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - checkout
+      
+      - run:
+          command: |
+            pip install -r requirements.txt
+            python demo.py --figure_suffix svg
+      - store_artifacts:
+            path: /build/outlier_boundary_illustration.svg
+            destination: outlier_boundary_illustration.svg
