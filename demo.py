@@ -122,7 +122,7 @@ def plot_experimental_results(show_pic, suffix):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--task', default='boundary_plot', choices=['bounadry_plot', 'experiment_matrix_plot'])
+    parser.add_argument('--task', default='boundary_plot', choices=['boundary_plot', 'experiment_matrix_plot'])
     parser.add_argument('--dataset', default='all', choices=['all', 'blob', 'moon'])
     parser.add_argument('--figure_suffix', default='eps', choices=['eps', 'pdf', 'svg', 'png'])    
     parser.add_argument('--show_pic', default=False, type=bool, nargs='?', const=True)
