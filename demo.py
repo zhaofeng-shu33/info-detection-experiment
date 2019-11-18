@@ -108,15 +108,25 @@ def plot_barchart_for_dataset(axis):
     axis.set_title('(c) Method comparison')
     axis.legend(loc='upper center', bbox_to_anchor=(0.68, 1)).set_zorder(0)
 
+def get_file_path(keyword):
+    match_file_name = ''
+    for i in os.listdir('build'):
+        if i.find(keyword) > 0:
+            match_file_name = i
+            break
+    if match_file_name == '':
+        raise FileNotFoundError(keyword)
+    return match_file_name
+
 def plot_experimental_results(show_pic, suffix):
     _, (a1, a2, a3) = plt.subplots(1, 3, gridspec_kw={'width_ratios': [3.2,3,4]}, figsize=(10.5, 3))
     plt.subplots_adjust(wspace=0, right=1, left=0)
     # speed comparison data file is available at https://github.com/zhaofeng-shu33/pspartition-speed-compare
-    plot_alg_time(a1, '2019-08-26-gaussian.json')
-    plot_alg_time(a2, '2019-09-19-two_level.json', show_labels=False)
+    plot_alg_time(a1, get_file_path('gaussian'))
+    plot_alg_time(a2, get_file_path('two_level'), show_labels=False)
     plot_barchart_for_dataset(a3)
     plt.tight_layout()
-    plt.savefig('build/experimental_results_triple.' + suffix)
+    plt.savefig('build/experimental_results_triple.' + suffix, transparent=True)
     if show_pic:
         plt.show()
 
