@@ -43,7 +43,7 @@ def plot_common_routine(show_pic, combination, suffix):
     plt.tight_layout()  
     if not(os.path.exists('build')):
         os.mkdir('build')    
-    plt.savefig('build/outlier_boundary_illustration.' + suffix)
+    plt.savefig('build/outlier_boundary_illustration.' + suffix, transparent=True)
     if show_pic:
         plt.show()
 
