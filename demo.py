@@ -100,7 +100,7 @@ def plot_barchart_for_dataset(axis):
     num_of_algs = len(alg_dic.keys())
     offset = 0
     for k, v in alg_dic.items():
-        axis.bar(x - width/2 + offset * width/num_of_algs, v, width/num_of_algs, label = method_translate[k])
+        axis.bar(x - width/2 + offset * width/num_of_algs, v, width/num_of_algs, label=method_translate[k])
         offset += 1
     axis.set_xticks(x)
     axis.set_xticklabels(dataset_list)
