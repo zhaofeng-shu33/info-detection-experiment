@@ -17,6 +17,8 @@ class InfoOutlierDetector(InfoCluster):
         super().fit(X)
         X_len = X.shape[0]
         num_class_plus_one = 2
+        # outlier detection assuming there are clustering structures in inliers
+        # https://github.com/zhaofeng-shu33/info-clustering-research/blob/23f8445cebcd56f325635e404c4f386652887f46/clustering_with_outliers.tex
         while X_len <= num_class_plus_one * len(self.partition_list[-num_class_plus_one]) and len(self.partition_list) > num_class_plus_one:
             num_class_plus_one += 1
         partition_list = self.partition_list[-num_class_plus_one]
