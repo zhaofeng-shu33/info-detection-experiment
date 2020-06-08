@@ -1,6 +1,7 @@
 import argparse
 import os
 import json
+import random
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,25 +11,50 @@ from info_detection import InfoOutlierDetector
 from util import generate_one_blob, generate_two_moon
 from util import load_parameters
 
-def get_moon_configuration():
+class FourPart:
+    def __init__(self, _np, _gamma=1):
+        '''
+        np is the number of points at each part
+        '''
+        #  (0, 0.1) to (0, 0.2)
+        self._gamma = _gamma
+        pos_list = []
+        part_center = [[3,3],[3,-3],[-3,-3],[-3,3]]
+        rng = np.random.RandomState(42)
+        for i in range(4): # radius: 0.1*i
+            for j in range(_np):
+                x = part_center[i][0] + rng.normal(0,1) # standard normal distribution disturbance
+                y = part_center[i][1] + rng.normal(0,1)                
+                pos_list.append([x, y])
+        self.pos_list = np.asarray(pos_list)
+
+def get_moon_configuration(compare_elliptic=True):
     train_data, _ = generate_two_moon()
 
-    alg = EllipticEnvelope(contamination=0.15)
     ic = InfoOutlierDetector(gamma=0.8)
-    return [('Info-Detection on Moon', ic, train_data), ('Elliptic Envelope on Moon', alg, train_data)]
+    if compare_elliptic:
+        alg = EllipticEnvelope(contamination=0.15)
+        return [('Info-Detection on Moon', ic, train_data), ('Elliptic Envelope on Moon', alg, train_data)]
+    return [('Info-Detection on Moon', ic, train_data)]
 
 def get_blob_configuration():
     train_data, _ = generate_one_blob()
 
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
-    return [('Info-Detection on GaussianBlob', ic, train_data)]  
-    
+    return [('Info-Detection on GaussianBlob', ic, train_data)]
+
+def get_4_blobs_configuration():
+    four_part = FourPart(25)
+    train_data = np.vstack((four_part.pos_list, np.array([0, 0])))
+    ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
+    return [('Info-Detection on 4-GaussianBlobs', ic, train_data)]    
+
 def plot_common_routine(show_pic, combination, suffix):
     xx, yy = np.meshgrid(np.linspace(-7, 7, 150),
                      np.linspace(-7, 7, 150))
     num_of_alg = len(combination)                     
     plt.figure(figsize=(3 * num_of_alg, 3))
-    label_text = ['(a)', '(b)', '(c)']
+    label_text = ['(a)', '(b)', '(c)', '(d)']
     for i, combination_tuple in enumerate(combination):
         plt.subplot(1, num_of_alg, i+1)
         alg_name, alg_class, train_data = combination_tuple
@@ -36,7 +62,7 @@ def plot_common_routine(show_pic, combination, suffix):
         Z = alg_class.predict(np.c_[xx.ravel(), yy.ravel()])
         Z = Z.reshape(xx.shape)    
         plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors='black')
-        plt.scatter(train_data[y_pred==1,0], train_data[y_pred==1,1], s=5)
+        plt.scatter(train_data[y_pred>=1,0], train_data[y_pred>=1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
         plt.xlabel(label_text[i])
         plt.title(alg_name)
@@ -133,16 +159,19 @@ def plot_experimental_results(show_pic, suffix):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', default='boundary_plot', choices=['boundary_plot', 'experiment_matrix_plot'])
-    parser.add_argument('--dataset', default='all', choices=['all', 'blob', 'moon'])
+    parser.add_argument('--dataset', default='all', choices=['all', 'blob', 'moon', '4-blobs'])
     parser.add_argument('--figure_suffix', default='eps', choices=['eps', 'pdf', 'svg', 'png'])    
     parser.add_argument('--show_pic', default=False, type=bool, nargs='?', const=True)
+    parser.add_argument('--omit_elliptic', default=False, type=bool, const=True, nargs='?')
     args = parser.parse_args()
     if args.task == 'boundary_plot':
         combination_list = []
         if(args.dataset == 'all' or args.dataset == 'blob'):
             combination_list.extend(get_blob_configuration())
+        if(args.dataset == 'all' or args.dataset == '4-blobs'):
+            combination_list.extend(get_4_blobs_configuration())
         if(args.dataset == 'all' or args.dataset == 'moon'):
-            combination_list.extend(get_moon_configuration())
+            combination_list.extend(get_moon_configuration(not args.omit_elliptic))
         plot_common_routine(args.show_pic, combination_list, args.figure_suffix)
     else:
         plot_experimental_results(args.show_pic, args.figure_suffix)
