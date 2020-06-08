@@ -6,6 +6,7 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.covariance import EllipticEnvelope
+from sklearn.ensemble import IsolationForest
 
 from info_detection import InfoOutlierDetector
 from util import generate_one_blob, generate_two_moon
@@ -44,10 +45,13 @@ def get_blob_configuration():
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
     return [(PREFIX_TEXT + 'GaussianBlob', ic, train_data)]
 
-def get_4_blobs_configuration():
+def get_4_blobs_configuration(compare_isolation_forest=False):
     four_part = FourPart(25)
     train_data = np.vstack((four_part.pos_list, np.array([0, 0])))
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
+    if compare_isolation_forest:
+        i_f = IsolationForest()
+        return [(PREFIX_TEXT + '4-GaussianBlobs', ic, train_data), ('Isolation Forest', i_f, train_data)]
     return [(PREFIX_TEXT + '4-GaussianBlobs', ic, train_data)]
 
 def plot_common_routine(show_pic, combination, suffix):
