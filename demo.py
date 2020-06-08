@@ -11,6 +11,7 @@ from info_detection import InfoOutlierDetector
 from util import generate_one_blob, generate_two_moon
 from util import load_parameters
 
+PREFIX_TEXT = 'Info-Detection on '
 class FourPart:
     def __init__(self, _np, _gamma=1):
         '''
@@ -22,9 +23,9 @@ class FourPart:
         part_center = [[3,3],[3,-3],[-3,-3],[-3,3]]
         rng = np.random.RandomState(42)
         for i in range(4): # radius: 0.1*i
-            for j in range(_np):
+            for _ in range(_np):
                 x = part_center[i][0] + rng.normal(0,1) # standard normal distribution disturbance
-                y = part_center[i][1] + rng.normal(0,1)                
+                y = part_center[i][1] + rng.normal(0,1)
                 pos_list.append([x, y])
         self.pos_list = np.asarray(pos_list)
 
@@ -34,25 +35,25 @@ def get_moon_configuration(compare_elliptic=True):
     ic = InfoOutlierDetector(gamma=0.8)
     if compare_elliptic:
         alg = EllipticEnvelope(contamination=0.15)
-        return [('Info-Detection on Moon', ic, train_data), ('Elliptic Envelope on Moon', alg, train_data)]
-    return [('Info-Detection on Moon', ic, train_data)]
+        return [(PREFIX_TEXT + 'Moon', ic, train_data), ('Elliptic Envelope on Moon', alg, train_data)]
+    return [(PREFIX_TEXT + 'Moon', ic, train_data)]
 
 def get_blob_configuration():
     train_data, _ = generate_one_blob()
 
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
-    return [('Info-Detection on GaussianBlob', ic, train_data)]
+    return [(PREFIX_TEXT + 'GaussianBlob', ic, train_data)]
 
 def get_4_blobs_configuration():
     four_part = FourPart(25)
     train_data = np.vstack((four_part.pos_list, np.array([0, 0])))
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
-    return [('Info-Detection on 4-GaussianBlobs', ic, train_data)]    
+    return [(PREFIX_TEXT + '4-GaussianBlobs', ic, train_data)]
 
 def plot_common_routine(show_pic, combination, suffix):
     xx, yy = np.meshgrid(np.linspace(-7, 7, 150),
                      np.linspace(-7, 7, 150))
-    num_of_alg = len(combination)                     
+    num_of_alg = len(combination)
     plt.figure(figsize=(3 * num_of_alg, 3))
     label_text = ['(a)', '(b)', '(c)', '(d)']
     for i, combination_tuple in enumerate(combination):
@@ -60,15 +61,15 @@ def plot_common_routine(show_pic, combination, suffix):
         alg_name, alg_class, train_data = combination_tuple
         y_pred = alg_class.fit_predict(train_data)
         Z = alg_class.predict(np.c_[xx.ravel(), yy.ravel()])
-        Z = Z.reshape(xx.shape)    
+        Z = Z.reshape(xx.shape)
         plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors='black')
         plt.scatter(train_data[y_pred>=1,0], train_data[y_pred>=1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
         plt.xlabel(label_text[i])
         plt.title(alg_name)
-    plt.tight_layout()  
+    plt.tight_layout()
     if not(os.path.exists('build')):
-        os.mkdir('build')    
+        os.mkdir('build')
     plt.savefig('build/outlier_boundary_illustration.' + suffix, transparent=True)
     if show_pic:
         plt.show()
@@ -100,7 +101,7 @@ def plot_alg_time(axis, filename, omit_list = ['pdt'], show_labels=True):
     axis.xaxis.set_ticks(x_data)
     if show_labels:
         axis.set_ylabel('Time(s)', fontsize=16)
-        axis.set_xlabel('N(Nodes)')    
+        axis.set_xlabel('N(Nodes)')
         axis.xaxis.set_label_coords(-0.14, -0.035)
     if filename.find('gaussian') >= 0:
         plot_title = '(a) GaussianBlobs'
@@ -160,10 +161,17 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', default='boundary_plot', choices=['boundary_plot', 'experiment_matrix_plot'])
     parser.add_argument('--dataset', default='all', choices=['all', 'blob', 'moon', '4-blobs'])
-    parser.add_argument('--figure_suffix', default='eps', choices=['eps', 'pdf', 'svg', 'png'])    
+    parser.add_argument('--figure_suffix', default='eps', choices=['eps', 'pdf', 'svg', 'png'])
     parser.add_argument('--show_pic', default=False, type=bool, nargs='?', const=True)
     parser.add_argument('--omit_elliptic', default=False, type=bool, const=True, nargs='?')
+    parser.add_argument('--prefix_text', default='Info-Clustering on')
     args = parser.parse_args()
+    if len(args.prefix_text) > 0:
+        PREFIX_TEXT = args.prefix_text
+        if args.prefix_text[-1] != ' ':
+            PREFIX_TEXT += ' '
+    else:
+        PREFIX_TEXT = ''
     if args.task == 'boundary_plot':
         combination_list = []
         if(args.dataset == 'all' or args.dataset == 'blob'):
