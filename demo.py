@@ -36,14 +36,14 @@ def get_moon_configuration(compare_elliptic=True):
     ic = InfoOutlierDetector(gamma=0.8)
     if compare_elliptic:
         alg = EllipticEnvelope(contamination=0.15)
-        return [(PREFIX_TEXT + 'Moon', ic, train_data), ('Elliptic Envelope on Moon', alg, train_data)]
-    return [(PREFIX_TEXT + 'Moon', ic, train_data)]
+        return [('半月型x2（HPSP）', ic, train_data), ('半月型x2(椭圆包络)', alg, train_data)]
+    return [('半月型x2', ic, train_data)]
 
 def get_blob_configuration():
     train_data, _ = generate_one_blob()
 
     ic = InfoOutlierDetector(gamma=0.5) # 1/num_of_features
-    return [(PREFIX_TEXT + 'GaussianBlob', ic, train_data)]
+    return [('高斯块x1', ic, train_data)]
 
 def get_4_blobs_configuration(compare_isolation_forest=False):
     four_part = FourPart(25)
@@ -52,7 +52,7 @@ def get_4_blobs_configuration(compare_isolation_forest=False):
     if compare_isolation_forest:
         i_f = IsolationForest()
         return [(PREFIX_TEXT + '4-GaussianBlobs', ic, train_data), ('Isolation Forest', i_f, train_data)]
-    return [(PREFIX_TEXT + '4-GaussianBlobs', ic, train_data)]
+    return [('高斯块x4', ic, train_data)]
 
 def plot_common_routine(show_pic, combination, suffix):
     xx, yy = np.meshgrid(np.linspace(-7, 7, 150),
@@ -70,7 +70,7 @@ def plot_common_routine(show_pic, combination, suffix):
         plt.scatter(train_data[y_pred>=1,0], train_data[y_pred>=1,1], s=5)
         plt.scatter(train_data[y_pred==-1,0], train_data[y_pred==-1,1], s=5)
         plt.xlabel(label_text[i])
-        plt.title(alg_name)
+        plt.title(alg_name, fontname='Songti SC')
     plt.tight_layout()
     if not(os.path.exists('build')):
         os.mkdir('build')
@@ -165,7 +165,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', default='boundary_plot', choices=['boundary_plot', 'experiment_matrix_plot'])
     parser.add_argument('--dataset', default='all', choices=['all', 'blob', 'moon', '4-blobs'])
-    parser.add_argument('--figure_suffix', default='eps', choices=['eps', 'pdf', 'svg', 'png'])
+    parser.add_argument('--figure_suffix', default='pdf', choices=['eps', 'pdf', 'svg', 'png'])
     parser.add_argument('--show_pic', default=False, type=bool, nargs='?', const=True)
     parser.add_argument('--omit_elliptic', default=False, type=bool, const=True, nargs='?')
     parser.add_argument('--prefix_text', default='Info-Clustering on')
