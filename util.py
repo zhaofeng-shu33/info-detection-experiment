@@ -4,11 +4,12 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import scale
 from sklearn.datasets import make_blobs, make_moons
-
-from uci_glass_outlier import fetch_uci_glass_outlier
-from lymphography_outlier import fetch_or_load_lymphography
-from ionosphere_outlier import fetch_or_load_Ionosphere
-
+try:
+    from uci_glass_outlier import fetch_uci_glass_outlier
+    from lymphography_outlier import fetch_or_load_lymphography
+    from ionosphere_outlier import fetch_or_load_Ionosphere
+except:
+    pass
 BUILD_DIR = 'build'
 PARAMETER_FILE = 'parameter.json'
 
