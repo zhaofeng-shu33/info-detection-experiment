@@ -76,6 +76,7 @@ def fetch_uci_glass_outlier(data_home=None, shuffle=False, random_state=0,
 
         glass = np.genfromtxt(data_path, delimiter=",")
         # the class 6 (minority) as outlier and all other classes as inliers
+        # number of outliers in total: 9
         glass[:,-1] = 2 * (glass[:,-1] != 6) -1
         _joblib.dump(glass, filepath, compress=6)
         remove(data_path)
